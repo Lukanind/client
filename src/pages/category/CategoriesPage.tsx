@@ -1,25 +1,38 @@
 import {FC} from "react";
 import { Layout } from "../../components/layouts";
-import { useNavigate } from 'react-router-dom';
-import { RoutesPaths } from '../../constants/commonConstants';
-import { Button } from "../../components";
+//import { useNavigate } from 'react-router-dom';
+//import { RoutesPaths } from '../../constants/commonConstants';
+//import { Button } from "../../components";
 
 export const CategoriesPage: FC = () => {
 
-    const navigate = useNavigate();
+    //const navigate = useNavigate();
 
-    const loginHandler = () => {
+    // const loginHandler = () => {
         
-        navigate(RoutesPaths.New)
-    }
+    //     navigate(RoutesPaths.New)
+    // }
 
     return (
-        <Layout footer={<>footer</>}>
-            <div>CategoriesPage</div>
-            <div className='login-page__actions'>
-                    <Button text='В новую страницу' onClick={loginHandler} type="primary"/>
-                    
+        <Layout >
+            <div>
+                <div>
+                    <select></select>
+                    <div>
+                        Список товаров
+                    </div>
                 </div>
+                <div>
+                    <div>
+                        <span>Название</span>
+                        <div>*</div>
+                    </div>
+                    <div>
+                        <div>Пункт 1</div>
+                        <div>Пункт 2</div>
+                    </div>
+                </div>
+            </div>
         </Layout>
     );
 }
