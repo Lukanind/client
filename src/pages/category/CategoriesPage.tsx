@@ -3,6 +3,8 @@ import { Layout } from "../../components/layouts";
 //import { useNavigate } from 'react-router-dom';
 //import { RoutesPaths } from '../../constants/commonConstants';
 //import { Button } from "../../components";
+import './categoryPageStyles.scss';
+import { DropDown } from "../../components";
 
 export const CategoriesPage: FC = () => {
 
@@ -15,9 +17,9 @@ export const CategoriesPage: FC = () => {
 
     return (
         <Layout >
-            <div>
-                <div>
-                    <select></select>
+            <div className="cat-page">
+                <div className="cat-page__users-list-container">
+                    <DropDown items={[]} label="Категории:" />
                     <div>
                         Список товаров
                     </div>

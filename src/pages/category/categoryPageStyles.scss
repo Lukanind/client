@@ -1,4 +1,6 @@
-.cat-page{
+@import '../../styles/variables';
+
+.cat-page {
     width: 100%;
     height: calc(100vh - 75px);
     display: flex;
@@ -8,6 +10,6 @@
         min-width: 500px;
         max-width: 500px;
         border-right: 1px solid $color-dirtywhite;
-        box-shadow: 1px 0px 4px -3px $color-delimitershadow
+        box-shadow: 1px 0px 4px -3px $color-delimitershadow;
     }
 }

@@ -1,0 +1,17 @@
+.drop-down {
+    display: flex;
+    flex-direction: column;
+
+    &__ldl{
+        color: #8f8f8f;
+        font-size: 14px;
+
+        &_strong {
+            font-weight: 600;
+        }
+    }
+
+    &__select {
+
+    }
+}
