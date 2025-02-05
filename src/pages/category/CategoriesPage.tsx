@@ -4,7 +4,7 @@ import { Layout } from "../../components/layouts";
 //import { RoutesPaths } from '../../constants/commonConstants';
 //import { Button } from "../../components";
 import './categoryPageStyles.scss';
-import { DropDown } from "../../components";
+import { DropDown, ProductsList } from "../../components";
 
 export const CategoriesPage: FC = () => {
 
@@ -20,15 +20,20 @@ export const CategoriesPage: FC = () => {
             <div className="cat-page">
                 <div className="cat-page__users-list-container">
                     <DropDown items={[{
-                        text: 'Товар 1', value: '1'
-                    },{
-                        text: 'Товар 2', value: '2'
-                    },{
-                        text: 'Товар 3', value: '3'
-                    }]} label="Категории:" />
-                    <div>
-                        Список товаров
-                    </div>
+                            text: 'Товар 1', value: '1'
+                        },{
+                            text: 'Товар 2', value: '2'
+                        },{
+                            text: 'Товар 3', value: '3'
+                        }]} 
+                        label="Категории:" 
+                        selectedChanged={(val) => console.log(val)}
+                    />
+                    <ProductsList productsList={[
+                        {id: 1, name: 'Носки', brand: 'Белорусский трикотаж', price: 200},
+                        {id: 2, name: 'Что-то там', brand: 'Бренд', price: 2000},
+                        {id: 3, name: 'Очки', price: 666}
+                    ]} />
                 </div>
                 <div>
                     <div>
