@@ -22,7 +22,7 @@ export const DropDown: FC<DropDownProps> = props => {
             <select className="drop-down__select" onChange={selectedChangedHandler}>
                 {items.map((items, idx) => {
                     return (
-                        <option key={idx} value={items.value}></option>
+                        <option key={idx} value={items.value}>{items.text}</option>
                     );
                 })}
             </select>
