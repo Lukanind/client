@@ -4,10 +4,10 @@ import './dropDownStyles.scss';
 import clsx from 'classnames';
 
 export const DropDown: FC<DropDownProps> = props => {
-    const { items, label, lblWeight } = props;
+    const { items, label, lblWeight, selectedChanged } = props;
 
     const selectedChangedHandler = (event: ChangeEvent<HTMLSelectElement>) => {
-        const selectedValue = event.target.value;
+        selectedChanged && selectedChanged(event.target.value);
     }
 
     return (
