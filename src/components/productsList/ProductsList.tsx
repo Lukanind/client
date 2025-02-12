@@ -2,6 +2,7 @@ import { FC, useState } from "react";
 import { ProductsListProps } from "./ProductsListProps";
 import './productListStyles.scss'
 import clsx from 'classnames';
+import { PencilIcon, TrashIcon } from "../../assets/icons";
 
 export const ProductsList: FC<ProductsListProps> = props => {
     const {productsList, onItemClick} = props;
@@ -22,7 +23,13 @@ export const ProductsList: FC<ProductsListProps> = props => {
                     className={clsx('prod-list__item', {'prod-list__item_selected': isSelected(product.id)})}
                     onClick={() => productClickHandler(product.id)}
                 >
-                    {`${product.name} ${product.brand ?? ''} ${product.price}₽`.trim()}
+                    <div>
+                        {`${product.name} ${product.brand ?? ''} ${product.price}₽`.trim()}
+                    </div>
+                    <div>
+                        <PencilIcon width={18} height={18}/>
+                        <TrashIcon width={18} height={18}/>
+                    </div>   
                 </div>)
             })}
         </div>
