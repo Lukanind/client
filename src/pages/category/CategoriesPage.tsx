@@ -20,11 +20,11 @@ export const CategoriesPage: FC = () => {
             <div className="cat-page">
                 <div className="cat-page__users-list-container">
                     <DropDown items={[{
-                            text: 'Товар 1', value: '1'
+                            text: 'Категория 1', value: '1'
                         },{
-                            text: 'Товар 2', value: '2'
+                            text: 'Категория 2', value: '2'
                         },{
-                            text: 'Товар 3', value: '3'
+                            text: 'Категория 3', value: '3'
                         }]} 
                         label="Категории:" 
                         selectedChanged={(val) => console.log(val)}

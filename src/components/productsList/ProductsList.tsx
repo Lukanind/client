@@ -1,13 +1,15 @@
 import { FC, useState } from "react";
 import { ProductsListProps } from "./ProductsListProps";
+import './productListStyles.scss'
 import clsx from 'classnames';
 
 export const ProductsList: FC<ProductsListProps> = props => {
-    const {productsList} = props;
+    const {productsList, onItemClick} = props;
     const [selectedProduct, setSelectedProduct] = useState(0);
 
     const productClickHandler = (id: number) => {
         setSelectedProduct(id);
+        onItemClick && onItemClick(id);
     }
 
     const isSelected = (id: number) => selectedProduct === id;
