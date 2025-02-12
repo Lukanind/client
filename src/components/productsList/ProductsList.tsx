@@ -23,10 +23,10 @@ export const ProductsList: FC<ProductsListProps> = props => {
                     className={clsx('prod-list__item', {'prod-list__item_selected': isSelected(product.id)})}
                     onClick={() => productClickHandler(product.id)}
                 >
-                    <div>
+                    <div className="prod-list__item-fio">
                         {`${product.name} ${product.brand ?? ''} ${product.price}₽`.trim()}
                     </div>
-                    <div>
+                    <div className="prod-list__item-actions">
                         <PencilIcon width={18} height={18}/>
                         <TrashIcon width={18} height={18}/>
                     </div>   

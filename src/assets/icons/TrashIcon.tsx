@@ -19,7 +19,7 @@ export const TrashIcon: FC<IconProps> = props => {
         className={className}
         xmlns="http://www.w3.org/2000/svg">
         <title>Trash</title>
-        <g id="Page-1" stroke={color} stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Page-1" fill="none" fill-rule="evenodd">
             <g id="Trash">
                 <rect id="Rectangle" fill-rule="nonzero" x="0" y="0" width="24" height="24">
     
@@ -36,7 +36,7 @@ export const TrashIcon: FC<IconProps> = props => {
                 <line x1="14" y1="10" x2="14" y2="16" id="Path" stroke={color} stroke-width="2" stroke-linecap="round">
     
     </line>
-                <path d="M15,6 C15,4.34315 13.6569,3 12,3 C10.3431,3 9,4.34315 9,6" id="Path" stroke="#0C0310" stroke-width="2" stroke-linecap="round">
+                <path d="M15,6 C15,4.34315 13.6569,3 12,3 C10.3431,3 9,4.34315 9,6" id="Path" stroke={color} stroke-width="2" stroke-linecap="round">
     
     </path>
             </g>
