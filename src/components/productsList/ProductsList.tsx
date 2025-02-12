@@ -1,5 +1,6 @@
 import { FC, useState } from "react";
 import { ProductsListProps } from "./ProductsListProps";
+import clsx from 'classnames';
 
 export const ProductsList: FC<ProductsListProps> = props => {
     const {productsList} = props;
@@ -12,10 +13,13 @@ export const ProductsList: FC<ProductsListProps> = props => {
     const isSelected = (id: number) => selectedProduct === id;
 
     return (
-        <div>
+        <div className="prod-list">
             {productsList.map(product => {
                 return (
-                <div key={product.id} onClick={() => productClickHandler(product.id)}>
+                <div key={product.id} 
+                    className={clsx('prod-list__item', {'prod-list__item_selected': isSelected(product.id)})}
+                    onClick={() => productClickHandler(product.id)}
+                >
                     {`${product.name} ${product.brand ?? ''} ${product.price}₽`.trim()}
                 </div>)
             })}
