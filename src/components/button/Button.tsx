@@ -5,13 +5,14 @@ import clsx from 'classnames';
 
 export const Button: FC<ButtonProps> = props => {
     const {
+        className,
         onClick,
         text,
         type
     } = props;
 
     return (
-        <div className={clsx('button', {
+        <div className={clsx('button', className, {
             'button__primary': type === 'primary',
             'button__secondary': type === 'secondary',
         })} onClick={onClick}>

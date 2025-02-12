@@ -4,7 +4,7 @@ import { Layout } from "../../components/layouts";
 //import { RoutesPaths } from '../../constants/commonConstants';
 //import { Button } from "../../components";
 import './categoryPageStyles.scss';
-import { DropDown, ProductsList } from "../../components";
+import { Button, DropDown, ProductsList } from "../../components";
 
 export const CategoriesPage: FC = () => {
 
@@ -33,7 +33,10 @@ export const CategoriesPage: FC = () => {
                         {id: 1, name: 'Носки', brand: 'Белорусский трикотаж', price: 200},
                         {id: 2, name: 'Что-то там', brand: 'Бренд', price: 2000},
                         {id: 3, name: 'Очки', price: 666}
-                    ]} />
+                    ]}
+                    onItemClick={(id) => console.log(id)}
+                    />
+                    <Button className="cat-page__add-user-btn" text="Добавить товар" />
                 </div>
                 <div>
                     <div>
