@@ -1,8 +1,10 @@
+@import '../../styles/variables.scss';
+
 .button{
     display: flex;
   border: none;
   box-sizing: border-box;
-  background: #3369f3;
+  background: $color-white;
   border-radius: 3px;
   min-height: 36px;
   font-size: 14px;

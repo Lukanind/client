@@ -1,7 +1,7 @@
 import {FC} from "react";
 import { Layout } from "../../components/layouts";
 import './categoryPageStyles.scss';
-import { Button, DropDown, ProductsList } from "../../components";
+import { Button, Dialog, DropDown, ProductsList } from "../../components";
 
 export const CategoriesPage: FC = () => {
 
@@ -29,6 +29,11 @@ export const CategoriesPage: FC = () => {
                     <Button className="cat-page__add-user-btn" text="Добавить товар" />
                 </div>
                 <div>
+
+                    <Dialog title="Test dialog">
+                        <div>123123</div>
+                    </Dialog>
+
                     <div>
                         <span>Название</span>
                         <div>*</div>
