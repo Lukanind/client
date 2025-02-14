@@ -1,19 +1,9 @@
 import {FC} from "react";
 import { Layout } from "../../components/layouts";
-//import { useNavigate } from 'react-router-dom';
-//import { RoutesPaths } from '../../constants/commonConstants';
-//import { Button } from "../../components";
 import './categoryPageStyles.scss';
 import { Button, DropDown, ProductsList } from "../../components";
 
 export const CategoriesPage: FC = () => {
-
-    //const navigate = useNavigate();
-
-    // const loginHandler = () => {
-        
-    //     navigate(RoutesPaths.New)
-    // }
 
     return (
         <Layout >
