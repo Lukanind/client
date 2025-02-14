@@ -2,4 +2,5 @@ export {Button} from './button';
 export {TextField} from './textField';
 export {UserMenu} from './userMenu';
 export {DropDown} from './dropDown';
-export {ProductsList} from './productsList'
+export {ProductsList} from './productsList';
+export {Dialog} from './dialog';
