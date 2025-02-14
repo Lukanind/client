@@ -1,9 +1,16 @@
-import {FC} from "react";
+import {FC, useState} from "react";
 import { Layout } from "../../components/layouts";
 import './categoryPageStyles.scss';
 import { Button, Dialog, DropDown, ProductsList } from "../../components";
 
 export const CategoriesPage: FC = () => {
+    const [showProductDialog, setShowProductDialog] = useState(false);
+    const [userActionMode, setUserActionMode] = useState<'create' | 'edit'>('create');
+
+    const createProductHandler = () => {
+        setUserActionMode('create');
+        setShowProductDialog(true);
+    }
 
     return (
         <Layout >
@@ -26,12 +33,14 @@ export const CategoriesPage: FC = () => {
                     ]}
                     onItemClick={(id) => console.log(id)}
                     />
-                    <Button className="cat-page__add-user-btn" text="Добавить товар" />
+                    <Button className="cat-page__add-user-btn" text="Добавить товар" onClick={createProductHandler}/>
                 </div>
                 <div>
 
-                    <Dialog title="Test dialog">
-                        <div>123123</div>
+                    <Dialog title={userActionMode !== 'edit' ? 'Добавить товар' : 'Изменить товар'}
+                    open={showProductDialog}
+                    onSave={() => {}}
+                    onCancel={() => setShowProductDialog(false)}>
                     </Dialog>
 
                     <div>
