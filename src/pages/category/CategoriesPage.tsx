@@ -1,15 +1,44 @@
-import {FC, useState} from "react";
+import {FC, useEffect, useState} from "react";
 import { Layout } from "../../components/layouts";
 import './categoryPageStyles.scss';
-import { Button, Dialog, DropDown, ProductsList } from "../../components";
+import { Button, Dialog, DropDown, ProductsList, TextField } from "../../components";
+import { Product } from "../../types/models";
+
+const fakeProductsData = [
+    {id: 1, name: 'Носки', brand: 'Белорусский трикотаж', price: 200},
+    {id: 2, name: 'Что-то там', brand: 'Бренд', price: 2000},
+    {id: 3, name: 'Очки', price: 666}
+];
 
 export const CategoriesPage: FC = () => {
+    const [productsData, setProductsData] = useState<Array<Product>>([]);
     const [showProductDialog, setShowProductDialog] = useState(false);
-    const [userActionMode, setUserActionMode] = useState<'create' | 'edit'>('create');
+    const [prodActionMode, setUserActionMode] = useState<'create' | 'edit'>('create');
+    const [prodToEdit, setProdToEdit] = useState(0);
+
+    useEffect(() => {
+        setProductsData(fakeProductsData);
+    }, []);
 
     const createProductHandler = () => {
         setUserActionMode('create');
         setShowProductDialog(true);
+    }
+
+    const editProductHandler = (id: number) => {
+        setUserActionMode('edit');
+        setProdToEdit(id)
+        setShowProductDialog(true);
+    }
+
+    const productDialogContentRenderer = () => {
+        return (
+            <>
+                <TextField labelText="Название" />
+                <TextField labelText="Бренд" />
+                <TextField labelText="Цена" />
+            </>
+        )
     }
 
     return (
@@ -26,20 +55,20 @@ export const CategoriesPage: FC = () => {
                         label="Категории:" 
                         selectedChanged={(val) => console.log(val)}
                     />
-                    <ProductsList productsList={[
-                        {id: 1, name: 'Носки', brand: 'Белорусский трикотаж', price: 200},
-                        {id: 2, name: 'Что-то там', brand: 'Бренд', price: 2000},
-                        {id: 3, name: 'Очки', price: 666}
-                    ]}
-                    onItemClick={(id) => console.log(id)}
+                    <ProductsList productsList={productsData}
+                        onItemClick={(id) => console.log('select', id)}
+                        onItemDelete={(id) => console.log('delete ', id)}
+                        onItemEdit={editProductHandler}
                     />
                     <Button className="cat-page__add-user-btn" text="Добавить товар" onClick={createProductHandler}/>
                 </div>
                 <div>
-                    <Dialog title={userActionMode !== 'edit' ? 'Добавить товар' : 'Изменить товар'}
-                    open={showProductDialog}
-                    onSave={() => {}}
-                    onCancel={() => setShowProductDialog(false)}>
+                    <Dialog title={prodActionMode !== 'edit' ? 'Добавить товар' : 'Изменить товар'}
+                        open={showProductDialog}
+                        onSave={() => {}}
+                        onCancel={() => setShowProductDialog(false)}
+                    >
+                        {productDialogContentRenderer()}
                     </Dialog>
 
                     <div>
