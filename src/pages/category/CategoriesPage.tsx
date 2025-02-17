@@ -36,7 +36,6 @@ export const CategoriesPage: FC = () => {
                     <Button className="cat-page__add-user-btn" text="Добавить товар" onClick={createProductHandler}/>
                 </div>
                 <div>
-
                     <Dialog title={userActionMode !== 'edit' ? 'Добавить товар' : 'Изменить товар'}
                     open={showProductDialog}
                     onSave={() => {}}

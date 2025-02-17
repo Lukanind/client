@@ -5,12 +5,26 @@ import clsx from 'classnames';
 import { PencilIcon, TrashIcon } from "../../assets/icons";
 
 export const ProductsList: FC<ProductsListProps> = props => {
-    const {productsList, onItemClick} = props;
+    const {
+        productsList, 
+        onItemClick,
+        onItemDelete,
+        onItemEdit
+    } = props;
+
     const [selectedProduct, setSelectedProduct] = useState(0);
 
     const productClickHandler = (id: number) => {
         setSelectedProduct(id);
         onItemClick && onItemClick(id);
+    }
+
+    const productEditHandler = (id: number) => {
+        onItemEdit && onItemEdit(id);
+    }
+
+    const productDeleteHandler = (id: number) => {
+        onItemDelete && onItemDelete(id);
     }
 
     const isSelected = (id: number) => selectedProduct === id;
@@ -27,8 +41,8 @@ export const ProductsList: FC<ProductsListProps> = props => {
                         {`${product.name} ${product.brand ?? ''} ${product.price}₽`.trim()}
                     </div>
                     <div className="prod-list__item-actions">
-                        <PencilIcon width={18} height={18}/>
-                        <TrashIcon width={18} height={18}/>
+                        <PencilIcon width={18} height={18} onClick={() => {productEditHandler(product.id)}}/>
+                        <TrashIcon width={18} height={18} onClick={() => {productDeleteHandler(product.id)}}/>
                     </div>   
                 </div>)
             })}
