@@ -13,7 +13,7 @@ const fakeProductsData = [
 export const CategoriesPage: FC = () => {
     const [productsData, setProductsData] = useState<Array<Product>>([]);
     const [showProductDialog, setShowProductDialog] = useState(false);
-    const [prodActionMode, setUserActionMode] = useState<'create' | 'edit'>('create');
+    const [prodActionMode, setProdActionMode] = useState<'create' | 'edit'>('create');
     const [prodToEdit, setProdToEdit] = useState(0);
 
     const [name, setName] = useState('');
@@ -25,18 +25,19 @@ export const CategoriesPage: FC = () => {
     }, []);
 
     useEffect(() => {
+        console.log('useEffect work');
         clearProductDialogFields();
         if(prodActionMode === 'edit') {
             const product = prodActionMode === 'edit'
             ? productsData.find(p => p.id === prodToEdit)
             : undefined;
 
-            setName(product?.name ?? '');
-            setBrand(product?.brand ?? '');
-            setPrice(String(product?.price) ?? '');
+            setName(product?.name ?? 'Nothing');
+            setBrand(product?.brand ?? 'Nothing');
+            setPrice(String(product?.price) ?? 'Nothing');
         }
         setProductsData(fakeProductsData);
-    }, []);
+    }, [productsData, prodActionMode, prodToEdit, showProductDialog]);
 
     const clearProductDialogFields = () => {
         setName('');
@@ -45,12 +46,12 @@ export const CategoriesPage: FC = () => {
     }
 
     const createProductHandler = () => {
-        setUserActionMode('create');
+        setProdActionMode('create');
         setShowProductDialog(true);
     }
 
     const editProductHandler = (id: number) => {
-        setUserActionMode('edit');
+        setProdActionMode('edit');
         setProdToEdit(id)
         setShowProductDialog(true);
     }
@@ -95,7 +96,7 @@ export const CategoriesPage: FC = () => {
                     <Dialog title={prodActionMode !== 'edit' ? 'Добавить товар' : 'Изменить товар'}
                         open={showProductDialog}
                         onSave={() => {}}
-                        onCancel={() => closeProductDialogHandler()}
+                        onCancel={closeProductDialogHandler}
                     >
                         {productDialogContentRenderer()}
                     </Dialog>
