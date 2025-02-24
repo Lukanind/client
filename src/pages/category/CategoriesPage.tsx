@@ -16,9 +16,33 @@ export const CategoriesPage: FC = () => {
     const [prodActionMode, setUserActionMode] = useState<'create' | 'edit'>('create');
     const [prodToEdit, setProdToEdit] = useState(0);
 
+    const [name, setName] = useState('');
+    const [brand, setBrand] = useState('');
+    const [price, setPrice] = useState('');
+
     useEffect(() => {
         setProductsData(fakeProductsData);
     }, []);
+
+    useEffect(() => {
+        clearProductDialogFields();
+        if(prodActionMode === 'edit') {
+            const product = prodActionMode === 'edit'
+            ? productsData.find(p => p.id === prodToEdit)
+            : undefined;
+
+            setName(product?.name ?? '');
+            setBrand(product?.brand ?? '');
+            setPrice(String(product?.price) ?? '');
+        }
+        setProductsData(fakeProductsData);
+    }, []);
+
+    const clearProductDialogFields = () => {
+        setName('');
+        setBrand('');
+        setPrice('');
+    }
 
     const createProductHandler = () => {
         setUserActionMode('create');
@@ -34,11 +58,16 @@ export const CategoriesPage: FC = () => {
     const productDialogContentRenderer = () => {
         return (
             <>
-                <TextField labelText="Название" />
-                <TextField labelText="Бренд" />
-                <TextField labelText="Цена" />
+                <TextField labelText="Название" value={name} onChange={(val) => setName(val)}/>
+                <TextField labelText="Бренд" value={brand} onChange={(val) => setBrand(val)}/>
+                <TextField labelText="Цена" value={String(price)} onChange={(val) => setPrice(val)}/>
             </>
         )
+    }
+
+    const closeProductDialogHandler = () =>{
+        setShowProductDialog(false);
+        clearProductDialogFields();
     }
 
     return (
@@ -66,7 +95,7 @@ export const CategoriesPage: FC = () => {
                     <Dialog title={prodActionMode !== 'edit' ? 'Добавить товар' : 'Изменить товар'}
                         open={showProductDialog}
                         onSave={() => {}}
-                        onCancel={() => setShowProductDialog(false)}
+                        onCancel={() => closeProductDialogHandler()}
                     >
                         {productDialogContentRenderer()}
                     </Dialog>
