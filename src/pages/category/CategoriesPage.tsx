@@ -2,7 +2,8 @@ import {FC, useEffect, useState} from "react";
 import { Layout } from "../../components/layouts";
 import './categoryPageStyles.scss';
 import { Button, Dialog, DropDown, ProductsList, TextField } from "../../components";
-import { Product } from "../../types/models";
+import { Category, Product } from "../../types/models";
+import { DropDownItem } from "../../components/dropDown/DropDownProps";
 
 const fakeProductsData = [
     {id: 1, name: 'Носки', brand: 'Белорусский трикотаж', price: 200},
@@ -10,8 +11,18 @@ const fakeProductsData = [
     {id: 3, name: 'Очки', price: 666}
 ];
 
+const fakeCategoriesData = [
+    {id: 1, name: 'Категория 1', products: []},
+    {id: 2, name: 'Категория 2', products: fakeProductsData},
+    {id: 3, name: 'Категория 3', products: []}
+];
 export const CategoriesPage: FC = () => {
+    const [categoriesData, setCategoriesData] = useState<Array<Category>>([]);
     const [productsData, setProductsData] = useState<Array<Product>>([]);
+
+    const [selectedCategoryId, setSelectedCategoryId] = useState<number>();
+    const [selectedProductId, setSelectedProductId] = useState<number>();
+
     const [showProductDialog, setShowProductDialog] = useState(false);
     const [prodActionMode, setProdActionMode] = useState<'create' | 'edit'>('create');
     const [prodToEdit, setProdToEdit] = useState(0);
@@ -21,8 +32,19 @@ export const CategoriesPage: FC = () => {
     const [price, setPrice] = useState('');
 
     useEffect(() => {
-        setProductsData(fakeProductsData);
+        setTimeout(() => {
+            setCategoriesData(fakeCategoriesData);
+            if(Array.isArray(fakeCategoriesData) && fakeCategoriesData.length) {
+                setProductsData(fakeCategoriesData[0].products);
+            }
+        }, 2000);
     }, []);
+
+    useEffect(() => {
+        const selectedCategory = categoriesData.find(c => c.id === selectedCategoryId);
+        setProductsData(selectedCategory ? selectedCategory.products : []);
+        setSelectedProductId(undefined);
+    }, [categoriesData, selectedCategoryId]);
 
     useEffect(() => {
         console.log('useEffect work');
@@ -56,6 +78,10 @@ export const CategoriesPage: FC = () => {
         setShowProductDialog(true);
     }
 
+    const onProductSelectedHandler = (id: number) => {
+        setSelectedProductId(id);
+    }
+
     const productDialogContentRenderer = () => {
         return (
             <>
@@ -71,35 +97,40 @@ export const CategoriesPage: FC = () => {
         clearProductDialogFields();
     }
 
+    const categoryChangedHandler = (id?: string) => {
+        const _id: number | undefined = !id ? undefined : +id;
+        setSelectedCategoryId(_id);
+    }
+
     return (
         <Layout >
+            <Dialog title={prodActionMode !== 'edit' ? 'Добавить товар' : 'Изменить товар'}
+                open={showProductDialog}
+                onSave={() => {}}
+                onCancel={closeProductDialogHandler}
+            >
+                {productDialogContentRenderer()}
+            </Dialog>
             <div className="cat-page">
                 <div className="cat-page__users-list-container">
-                    <DropDown items={[{
-                            text: 'Категория 1', value: '1'
-                        },{
-                            text: 'Категория 2', value: '2'
-                        },{
-                            text: 'Категория 3', value: '3'
-                        }]} 
+                    <DropDown items={categoriesData.map(cc => {
+                        return {
+                            text: cc.name,
+                            value: cc.id.toString()
+                        } as DropDownItem
+                    })} 
                         label="Категории:" 
-                        selectedChanged={(val) => console.log(val)}
+                        selectedChanged={(val) => categoryChangedHandler(val)}
                     />
                     <ProductsList productsList={productsData}
-                        onItemClick={(id) => console.log('select', id)}
+                        onItemClick={(id) => onProductSelectedHandler(id)}
                         onItemDelete={(id) => console.log('delete ', id)}
                         onItemEdit={editProductHandler}
                     />
                     <Button className="cat-page__add-user-btn" text="Добавить товар" onClick={createProductHandler}/>
                 </div>
                 <div>
-                    <Dialog title={prodActionMode !== 'edit' ? 'Добавить товар' : 'Изменить товар'}
-                        open={showProductDialog}
-                        onSave={() => {}}
-                        onCancel={closeProductDialogHandler}
-                    >
-                        {productDialogContentRenderer()}
-                    </Dialog>
+                    
 
                     <div>
                         <span>Название</span>
