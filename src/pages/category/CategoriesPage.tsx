@@ -7,7 +7,20 @@ import { DropDownItem } from "../../components/dropDown/DropDownProps";
 
 const fakeProductsData = [
     {id: 1, name: 'Носки', brand: 'Белорусский трикотаж', price: 200},
-    {id: 2, name: 'Что-то там', brand: 'Бренд', price: 2000},
+    {id: 2, name: 'Что-то там', brand: 'Бренд', price: 2000,
+        description: {
+            id: 1,
+            made_in: 'Китай',
+            descritption: 'Описание товара'
+        },
+        features: [{
+            id: 1,
+            feature: 'GPS'
+        },{
+            id: 2,
+            feature: 'USB-C'
+        }]
+    },
     {id: 3, name: 'Очки', price: 666}
 ];
 
@@ -21,7 +34,7 @@ export const CategoriesPage: FC = () => {
     const [productsData, setProductsData] = useState<Array<Product>>([]);
 
     const [selectedCategoryId, setSelectedCategoryId] = useState<number>();
-    const [selectedProductId, setSelectedProductId] = useState<number>();
+    const [selectedProduct, setSelectedProduct] = useState<Product>();
 
     const [showProductDialog, setShowProductDialog] = useState(false);
     const [prodActionMode, setProdActionMode] = useState<'create' | 'edit'>('create');
@@ -43,7 +56,7 @@ export const CategoriesPage: FC = () => {
     useEffect(() => {
         const selectedCategory = categoriesData.find(c => c.id === selectedCategoryId);
         setProductsData(selectedCategory ? selectedCategory.products : []);
-        setSelectedProductId(undefined);
+        setSelectedProduct(undefined);
     }, [categoriesData, selectedCategoryId]);
 
     useEffect(() => {
@@ -79,7 +92,8 @@ export const CategoriesPage: FC = () => {
     }
 
     const onProductSelectedHandler = (id: number) => {
-        setSelectedProductId(id);
+        const product = productsData.find(p => p.id === id);
+        setSelectedProduct(product);
     }
 
     const productDialogContentRenderer = () => {
@@ -130,11 +144,14 @@ export const CategoriesPage: FC = () => {
                     <Button className="cat-page__add-user-btn" text="Добавить товар" onClick={createProductHandler}/>
                 </div>
                 <div>
-                    
-
                     <div>
-                        <span>Название</span>
-                        <div>*</div>
+                        <div>
+                            <span>Название</span>
+                            <div>*</div>
+                        </div>
+                        <div>
+                            actions
+                        </div>
                     </div>
                     <div>
                         <div>Пункт 1</div>

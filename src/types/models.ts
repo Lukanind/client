@@ -8,8 +8,7 @@ export interface Description {
 
 export interface Feature {
     id: number;
-    title: string;
-    description?: string; 
+    feature?: string; 
 }
 
 export interface Product {
@@ -18,7 +17,7 @@ export interface Product {
     brand?: string;
     price: number;
     description?: Description;
-    feature?: Feature;
+    features?: Array<Feature>;
 }
 
 export interface Category {
