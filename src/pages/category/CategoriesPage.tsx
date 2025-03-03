@@ -100,7 +100,7 @@ export const CategoriesPage: FC = () => {
         if(!selectedProduct) {
             return '';
         }
-        return '${selectedProduct.name} ${selectedProduct.brand ?? ""} ${selectedProduct.price}'.trim();
+        return `${selectedProduct.name} ${selectedProduct.brand ?? ""} ${selectedProduct.price}`.trim();
     }
 
     const productDialogContentRenderer = () => {
@@ -133,7 +133,7 @@ export const CategoriesPage: FC = () => {
                 {productDialogContentRenderer()}
             </Dialog>
             <div className="cat-page">
-                <div className="cat-page__users-list-container">
+                <div className="cat-page__product-list-container">
                     <DropDown items={categoriesData.map(cc => {
                         return {
                             text: cc.name,
@@ -148,21 +148,22 @@ export const CategoriesPage: FC = () => {
                         onItemDelete={(id) => console.log('delete ', id)}
                         onItemEdit={editProductHandler}
                     />
-                    <Button className="cat-page__add-user-btn" text="Добавить товар" onClick={createProductHandler}/>
+                    <Button className="cat-page__add-product-btn" text="Добавить товар" onClick={createProductHandler}/>
                 </div>
-                <div>
-                    <div>
-                        <div>
-                            <span>Название</span>
-                            <div>*</div>
+                <div className="cat-page__product-info-container">
+                    <div className="cat-page__product-info-header">
+                        <div className="cat-page__product-info-user">
+                            <div className="cat-page__product-info-fullname">
+                                {getInfo()}
+                            </div>
+                            <div className="cat-page__product-info-data">
+
+                            </div>
                         </div>
+                       
                         <div>
                             actions
                         </div>
-                    </div>
-                    <div>
-                        <div>Пункт 1</div>
-                        <div>Пункт 2</div>
                     </div>
                 </div>
             </div>

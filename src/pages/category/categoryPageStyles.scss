@@ -6,7 +6,7 @@
     display: flex;
     gap: 15px;
 
-    &__users-list-container {
+    &__products-list-container {
         min-width: 500px;
         max-width: 500px;
         border-right: 1px solid $color-dirtywhite;
@@ -17,8 +17,41 @@
         gap: 30px;
     }
 
-    &__add-user-btn {
+    &__add-product-btn {
         margin-top: auto;
         margin-bottom: 10px;
+    }
+
+    &__product-info-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    &__product-info-header {
+        display: flex;
+        gap: 30px;
+        align-items: center;
+        border-bottom: 1px solid $color-dirtywhite;
+        box-shadow: 0px opx 3px -3px $color-delimitershadow;
+        padding-bottom: 10px;
+    }
+
+    &__use-info-product {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+    }
+
+    &__product-info-fullname {
+        font-size: 20px;
+        color: $color-darkgrey;
+    }
+
+    &__product-info-data {
+        display: flex;
+        gap: 30px;
     }
 }
