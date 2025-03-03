@@ -54,4 +54,15 @@
         display: flex;
         gap: 30px;
     }
+
+    &__product-info-actions {
+        min-height: 32px;
+        min-width: 32px;
+        margin-left: auto;
+
+        & svg {
+            cursor: pointer;
+            opacity: 0.8;
+        }
+    }
 }

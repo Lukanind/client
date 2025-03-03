@@ -4,6 +4,7 @@ import './categoryPageStyles.scss';
 import { Button, Dialog, DropDown, ProductsList, TextField } from "../../components";
 import { Category, Product } from "../../types/models";
 import { DropDownItem } from "../../components/dropDown/DropDownProps";
+import { UploadIcon } from "../../assets/icons";
 
 const fakeProductsData = [
     {id: 1, name: 'Носки', brand: 'Белорусский трикотаж', price: 200},
@@ -123,6 +124,10 @@ export const CategoriesPage: FC = () => {
         setSelectedCategoryId(_id);
     }
 
+    const uploadFileHandler = () => {
+        
+    }
+
     return (
         <Layout >
             <Dialog title={prodActionMode !== 'edit' ? 'Добавить товар' : 'Изменить товар'}
@@ -161,8 +166,17 @@ export const CategoriesPage: FC = () => {
                             </div>
                         </div>
                        
+                        <div className="cat-page__product-info-actions">
+                            <UploadIcon onClick={uploadFileHandler}/>
+                        </div>
+                    </div>
+                    <div>
                         <div>
-                            actions
+                            Files List
+                        </div>
+                        <div>
+                            <div>Description</div>
+                            <div>Особенности товара</div>
                         </div>
                     </div>
                 </div>
