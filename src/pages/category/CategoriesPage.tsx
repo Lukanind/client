@@ -96,6 +96,13 @@ export const CategoriesPage: FC = () => {
         setSelectedProduct(product);
     }
 
+    const getInfo = () => {
+        if(!selectedProduct) {
+            return '';
+        }
+        return '${selectedProduct.name} ${selectedProduct.brand ?? ""} ${selectedProduct.price}'.trim();
+    }
+
     const productDialogContentRenderer = () => {
         return (
             <>
