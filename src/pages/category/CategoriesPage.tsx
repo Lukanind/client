@@ -7,19 +7,16 @@ import { DropDownItem } from "../../components/dropDown/DropDownProps";
 import { UploadIcon } from "../../assets/icons";
 
 const fakeProductsData = [
-    {id: 1, name: 'Носки', brand: 'Белорусский трикотаж', price: 200},
+    {id: 1, name: 'Носки', brand: 'Белорусский трикотаж', price: 200, description: 'Описание товара'},
     {id: 2, name: 'Что-то там', brand: 'Бренд', price: 2000,
-        description: {
-            id: 1,
-            made_in: 'Китай',
-            descritption: 'Описание товара'
-        },
         features: [{
             id: 1,
-            feature: 'GPS'
+            feature: 'GPS',
+            description: 'Есть'
         },{
             id: 2,
-            feature: 'USB-C'
+            feature: 'Порты',
+            description: 'USB-C, USB-A'
         }]
     },
     {id: 3, name: 'Очки', price: 666}
@@ -44,6 +41,7 @@ export const CategoriesPage: FC = () => {
     const [name, setName] = useState('');
     const [brand, setBrand] = useState('');
     const [price, setPrice] = useState('');
+    const [description, setDescription] = useState('');
 
     useEffect(() => {
         setTimeout(() => {
@@ -68,17 +66,19 @@ export const CategoriesPage: FC = () => {
             ? productsData.find(p => p.id === prodToEdit)
             : undefined;
 
-            setName(product?.name ?? 'Nothing');
-            setBrand(product?.brand ?? 'Nothing');
-            setPrice(String(product?.price) ?? 'Nothing');
+            setName(product?.name ?? '');
+            setBrand(product?.brand ?? '');
+            setPrice(String(product?.price) ?? '');
+            setDescription(product?.description ?? '');
         }
-        setProductsData(fakeProductsData);
+        //setProductsData(fakeProductsData);
     }, [productsData, prodActionMode, prodToEdit, showProductDialog]);
 
     const clearProductDialogFields = () => {
         setName('');
         setBrand('');
         setPrice('');
+        setDescription('');
     }
 
     const createProductHandler = () => {
@@ -101,7 +101,7 @@ export const CategoriesPage: FC = () => {
         if(!selectedProduct) {
             return '';
         }
-        return `${selectedProduct.name} ${selectedProduct.brand ?? ""} ${selectedProduct.price}`.trim();
+        return `${selectedProduct.name} ${selectedProduct.brand ?? ""}`.trim();
     }
 
     const productDialogContentRenderer = () => {
@@ -110,6 +110,7 @@ export const CategoriesPage: FC = () => {
                 <TextField labelText="Название" value={name} onChange={(val) => setName(val)}/>
                 <TextField labelText="Бренд" value={brand} onChange={(val) => setBrand(val)}/>
                 <TextField labelText="Цена" value={String(price)} onChange={(val) => setPrice(val)}/>
+                <TextField labelText="Описание" value={description} onChange={(val) => setDescription(val)}/>
             </>
         )
     }
@@ -162,7 +163,14 @@ export const CategoriesPage: FC = () => {
                                 {getInfo()}
                             </div>
                             <div className="cat-page__product-info-data">
-
+                                <div>
+                                    <strong>Цена: </strong>
+                                    <span>{selectedProduct?.price ?? '-'}</span>
+                                </div>
+                                <div>
+                                    <strong>Описание: </strong>
+                                    <span>{selectedProduct?.description ?? '-'}</span>
+                                </div>
                             </div>
                         </div>
                        

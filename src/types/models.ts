@@ -1,14 +1,7 @@
-export interface Description {
-    id: number;
-    color?: string;
-    size?: string;
-    made_in?: string;
-    description?: string; 
-}
-
 export interface Feature {
     id: number;
     feature?: string; 
+    description?: string;
 }
 
 export interface Product {
@@ -16,7 +9,7 @@ export interface Product {
     name: string;
     brand?: string;
     price: number;
-    description?: Description;
+    description?: string;
     features?: Array<Feature>;
 }
 
