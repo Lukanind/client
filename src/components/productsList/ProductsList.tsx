@@ -38,7 +38,7 @@ export const ProductsList: FC<ProductsListProps> = props => {
                     onClick={() => productClickHandler(product.id)}
                 >
                     <div className="prod-list__item-fio">
-                        {`${product.name} ${product.brand ?? ''} ${product.price}₽`.trim()}
+                        {`${product.name} ${product.brand ?? ''} ${product.price} ₽`.trim()}
                     </div>
                     <div className="prod-list__item-actions">
                         <PencilIcon width={18} height={18} onClick={() => {productEditHandler(product.id)}}/>

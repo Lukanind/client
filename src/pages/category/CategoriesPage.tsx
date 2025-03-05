@@ -165,7 +165,7 @@ export const CategoriesPage: FC = () => {
                             <div className="cat-page__product-info-data">
                                 <div>
                                     <strong>Цена: </strong>
-                                    <span>{selectedProduct?.price ?? '-'}</span>
+                                    <span>{selectedProduct?.price ?? ' -'}{' ₽'}</span>
                                 </div>
                                 <div>
                                     <strong>Описание: </strong>
