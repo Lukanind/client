@@ -18,3 +18,10 @@ export interface Category {
     name: string;
     products: Array<Product>;
 }
+
+export interface User {
+    id: number;
+    login: string;
+    password: string;
+    role: 'admin' | 'manager' | 'user';
+}
