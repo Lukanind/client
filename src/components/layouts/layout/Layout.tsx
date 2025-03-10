@@ -3,11 +3,15 @@ import { LayoutProps } from "./LayoutProps";
 import './layoutStyles.scss'
 import { LogoIcon } from "../../../assets/icons/LogoIcon";
 import { UserMenu } from "../../userMenu";
+import { useNavigate } from "react-router-dom";
+import { RoutesPaths } from "../../../constants/commonConstants";
 
 export const Layout: FC<LayoutProps> = props => {
     const {
         footer, headerChild, title, children
     } = props;
+
+    const navigate = useNavigate();
     
     return (
         <div className="layout">
@@ -22,7 +26,7 @@ export const Layout: FC<LayoutProps> = props => {
                 <div className="layout__user-menu">
                     <UserMenu items={[{
                         id: 'go_to_administration',
-                        action: () => {},
+                        action: () => {navigate(RoutesPaths.Administration)},
                         label: 'Администрирование'
                     }, {
                         id: 'exit',
