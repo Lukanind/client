@@ -5,10 +5,12 @@ import { WidgetLayout } from '../../components/layouts';
 import './loginPageStyles.scss';
 import { useNavigate } from 'react-router-dom';
 import { RoutesPaths } from '../../constants/commonConstants';
+import { Auth } from '../../api';
 
 export const LoginPage: FC = () => {
     const [login, setLogin] = useState<string>('');
     const [password, setPassword] = useState<string>('');
+    const {signIn} = Auth;
 
     const loginChangeHandler = (value: string) => {
         setLogin(value);
@@ -21,11 +23,19 @@ export const LoginPage: FC = () => {
     const navigate = useNavigate();
 
     const loginHandler = () => {
-        console.log({
-                login,
-                password
-            });
-        navigate(RoutesPaths.Categories)
+        // console.log({
+        //         login,
+        //         password
+        //     });
+        // navigate(RoutesPaths.Categories)
+
+        signIn({login, password})
+            .then((resp) => {
+                console.log(resp);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
     }
 
     const toRegistrationHandler = () => {

@@ -5,6 +5,8 @@ import { WidgetLayout } from '../../components/layouts';
 import './registrationPageStyles.scss';
 import { useNavigate } from 'react-router-dom';
 import { RoutesPaths } from '../../constants/commonConstants';
+import { Auth } from '../../api';
+import { AxiosError } from 'axios';
 
 type FormFieldsNames = 'login' | 'password' | 'repeatePassword' | 'lastName' | 'firstName' | 'midName';
 
@@ -12,15 +14,17 @@ interface RegistrationForm {
     login: string;
     password: string;
     repeatePassword: string;
-    lastName: string;
-    firstName: string;
-    midName?: string;
+    // lastName: string;
+    // firstName: string;
+    // midName?: string;
 }
 
 export const RegistrationPage: FC = () => {
 
     const [formFields, setFormFields] = useState<RegistrationForm>();
+    const [errorMessage, setErrorMessage] = useState<string>();
     const navigate = useNavigate();
+    const {signUp} = Auth;
 
     const changeFieldValue = (value: string | undefined, fieldName: FormFieldsNames) => {
         setFormFields(prev => {
@@ -31,12 +35,25 @@ export const RegistrationPage: FC = () => {
         })
     };
 
-    const goToLogin = () => {
-        navigate(RoutesPaths.Login);
-    }
-
     const registrationHandler = () => {
-        navigate(RoutesPaths.Categories);
+        if(!formFields?.login || !formFields?.password) {
+            setErrorMessage('Не задан логин или пароль!');
+            return;
+        }
+
+        if(formFields?.password !== formFields?.repeatePassword) {
+            setErrorMessage('Пароль и повторенный пароль не совпадают!');
+            return;
+        }
+
+        signUp({
+            login: formFields.login,
+            password: formFields.password
+        }).then(() => {
+            navigate(RoutesPaths.Categories);
+        }).catch((err) => {
+            setErrorMessage((err as AxiosError)?.message)
+        });
     }
 
     return (
@@ -50,12 +67,13 @@ export const RegistrationPage: FC = () => {
                         onChange={(value) => changeFieldValue(value, 'password')}/>
                     <TextField labelText="Повторите пароль:" value={formFields?.repeatePassword} type='password' 
                         onChange={(value) => changeFieldValue(value, 'repeatePassword')}/>
-                    <TextField labelText="Фамилия:" value={formFields?.lastName} type='text' 
+                    {/* <TextField labelText="Фамилия:" value={formFields?.lastName} type='text' 
                         onChange={(value) => changeFieldValue(value, 'lastName')}/>
                     <TextField labelText="Имя:" value={formFields?.firstName} type='text' 
                         onChange={(value) => changeFieldValue(value, 'firstName')}/>
                     <TextField labelText="Отчество:" value={formFields?.midName} type='text' 
-                        onChange={(value) => changeFieldValue(value, 'midName')}/>
+                        onChange={(value) => changeFieldValue(value, 'midName')}/> */}
+                    {errorMessage && (<span style={{color: 'red'}}>{errorMessage}</span>)}
                 </div>
                 <div className='reg-page__actions'>
                     <Button text='Зарегистрироваться' onClick={registrationHandler} type="primary"/>
