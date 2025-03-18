@@ -178,13 +178,15 @@ export const CategoriesPage: FC = () => {
                             <UploadIcon onClick={uploadFileHandler}/>
                         </div>
                     </div>
-                    <div>
-                        <div>
+                    <div className='cat-page__product-add-info'>
+                        <div className='cat-page__product-add-info-files'>
                             Files List
                         </div>
-                        <div>
-                            <div>Description</div>
-                            <div>Особенности товара</div>
+                        <div className='cat-page__product-add-info-data'>
+                            <div className='cat-page__product-add-info-data_cell'>
+                                Description</div>
+                            <div className='cat-page__product-add-info-data_cell'>
+                                Особенности товара</div>
                         </div>
                     </div>
                 </div>

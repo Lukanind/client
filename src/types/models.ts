@@ -25,3 +25,9 @@ export interface User {
     password: string;
     role: 'admin' | 'manager' | 'user';
 }
+
+export interface UserFiles {
+    id: number;
+    systeName: string;
+    displayName: string;
+}

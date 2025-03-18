@@ -64,4 +64,26 @@
             cursor: pointer;
         }
     }
+
+    &__product-add-info {
+        display: flex;
+        gap: 32px;
+        height: 100%;
+    }
+
+    &__product-add-info-files {
+        min-width: 500px;
+    }
+
+    &__product-add-info-data {
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 32px;
+
+        &_cell {
+            height: 50%;
+        }
+    }
 }
