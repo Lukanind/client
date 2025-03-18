@@ -77,7 +77,7 @@ export const RegistrationPage: FC = () => {
                 </div>
                 <div className='reg-page__actions'>
                     <Button text='Зарегистрироваться' onClick={registrationHandler} type="primary"/>
-                    <Button text='Войти' onClick={goToLogin} type="secondary"/>
+                    <Button text='Войти'  type="secondary"/>
                 </div>
             </div>
         </WidgetLayout>
