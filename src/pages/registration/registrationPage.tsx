@@ -24,7 +24,7 @@ export const RegistrationPage: FC = () => {
     const [formFields, setFormFields] = useState<RegistrationForm>();
     const [errorMessage, setErrorMessage] = useState<string>();
     const navigate = useNavigate();
-    const {signUp} = Auth;
+    const {signUp, signIn} = Auth;
 
     const changeFieldValue = (value: string | undefined, fieldName: FormFieldsNames) => {
         setFormFields(prev => {
@@ -46,11 +46,20 @@ export const RegistrationPage: FC = () => {
             return;
         }
 
-        signUp({
-            login: formFields.login,
+        const data = {login: formFields.login,
             password: formFields.password
-        }).then(() => {
-            navigate(RoutesPaths.Categories);
+        };
+
+        signUp(data).then(() => {
+            signIn(data).then(respData => {
+                if(respData.role === 'user') {
+                    navigate(`/${RoutesPaths.NoPermissions}`);
+                } else {
+                    navigate(`/${RoutesPaths.Categories}`);
+                }
+            }).catch(err =>
+                setErrorMessage((err as AxiosError)?.message)
+            );
         }).catch((err) => {
             setErrorMessage((err as AxiosError)?.message)
         });
@@ -59,7 +68,7 @@ export const RegistrationPage: FC = () => {
     return (
         <WidgetLayout>
             <div className="reg-page__form">
-                <h3 className='reg-page__title'>Вход</h3>
+                <h3 className='reg-page__title'>Регистрация</h3>
                 <div className='reg-page__fields'>
                     <TextField labelText="Логин:" value={formFields?.login} type='text' 
                         onChange={(value) => changeFieldValue(value, 'login')}/>

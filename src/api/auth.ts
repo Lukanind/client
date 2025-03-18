@@ -1,3 +1,4 @@
+import { AccessTokenKey } from "../constants/commonConstants";
 import { AxiosInstance } from "./axiosInstance";
 
 const {axiosPost} = AxiosInstance();
@@ -19,7 +20,9 @@ interface RegistrationRequestDto {
 }
 
 const signIn = async(loginData: LoginRequestDto) => {
-    await axiosPost('/login', loginData) as LoginResponceDto;
+    const data = await axiosPost('/login', loginData) as LoginResponceDto;
+    sessionStorage.setItem(AccessTokenKey, data.access_token)
+    return data;
 }
 
 const signUp = async(registrationData: RegistrationRequestDto) =>
