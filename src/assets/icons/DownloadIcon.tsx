@@ -11,7 +11,7 @@ export const DownloadIcon: FC<IconProps> = props => {
     } = props;
 
     return (
-        <svg fill={color} width={width} height={height} 
+        <svg fill='none' width={width} height={height} 
         onClick={onClick}
         className={className}
         viewBox="0 0 24 24" id="download-3" 

@@ -1,7 +1,7 @@
 import {FC, useEffect, useState} from "react";
 import { Layout } from "../../components/layouts";
 import './categoryPageStyles.scss';
-import { Button, Dialog, DropDown, ProductsList, TextField } from "../../components";
+import { Button, Dialog, DropDown, FilesList, ProductsList, TextField } from "../../components";
 import { Category, Product } from "../../types/models";
 import { DropDownItem } from "../../components/dropDown/DropDownProps";
 import { UploadIcon } from "../../assets/icons";
@@ -129,6 +129,14 @@ export const CategoriesPage: FC = () => {
         
     }
 
+    const downloadFileHandler = (id: number) => {
+        
+    }
+
+    const deleteFileHandler = (id: number) => {
+        
+    }
+
     return (
         <Layout >
             <Dialog title={prodActionMode !== 'edit' ? 'Добавить товар' : 'Изменить товар'}
@@ -180,7 +188,17 @@ export const CategoriesPage: FC = () => {
                     </div>
                     <div className='cat-page__product-add-info'>
                         <div className='cat-page__product-add-info-files'>
-                            Files List
+                            <FilesList 
+                            onFileDowmload={downloadFileHandler}
+                            onFileDelete={deleteFileHandler}
+                            filesList={[
+                                {
+                                    id: 1,
+                                    systemName: 'qwerty',
+                                    displayName: 'my_file.txt'
+                                }
+                            ]} 
+                            />
                         </div>
                         <div className='cat-page__product-add-info-data'>
                             <div className='cat-page__product-add-info-data_cell'>

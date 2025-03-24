@@ -28,6 +28,6 @@ export interface User {
 
 export interface UserFiles {
     id: number;
-    systeName: string;
+    systemName: string;
     displayName: string;
 }
