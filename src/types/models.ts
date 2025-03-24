@@ -1,6 +1,6 @@
 export interface Feature {
     id: number;
-    feature?: string; 
+    featureName?: string; 
     description?: string;
 }
 
@@ -11,6 +11,7 @@ export interface Product {
     price: number;
     description?: string;
     features?: Array<Feature>;
+    userFiles?: Array<UserFiles>;
 }
 
 export interface Category {

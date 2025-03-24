@@ -5,6 +5,7 @@ import { Button, Dialog, DropDown, FeaturesList, FilesList, ProductsList, TextFi
 import { Category, Product } from "../../types/models";
 import { DropDownItem } from "../../components/dropDown/DropDownProps";
 import { AddIcon, UploadIcon } from "../../assets/icons";
+import { Categories } from "../../api";
 
 const fakeProductsData = [
     {id: 1, name: 'Носки', brand: 'Белорусский трикотаж', price: 200, description: 'Описание товара'},
@@ -22,12 +23,14 @@ const fakeProductsData = [
     {id: 3, name: 'Очки', price: 666}
 ];
 
-const fakeCategoriesData = [
-    {id: 1, name: 'Категория 1', products: []},
-    {id: 2, name: 'Категория 2', products: fakeProductsData},
-    {id: 3, name: 'Категория 3', products: []}
-];
+// const fakeCategoriesData = [
+//     {id: 1, name: 'Категория 1', products: []},
+//     {id: 2, name: 'Категория 2', products: fakeProductsData},
+//     {id: 3, name: 'Категория 3', products: []}
+// ];
 export const CategoriesPage: FC = () => {
+    const {getCategories} = Categories;
+
     const [categoriesData, setCategoriesData] = useState<Array<Category>>([]);
     const [productsData, setProductsData] = useState<Array<Product>>([]);
 
@@ -49,13 +52,23 @@ export const CategoriesPage: FC = () => {
     const [featureDescription, setFeatureDescription] = useState('');
 
     useEffect(() => {
-        setTimeout(() => {
-            setCategoriesData(fakeCategoriesData);
-            if(Array.isArray(fakeCategoriesData) && fakeCategoriesData.length) {
-                setProductsData(fakeCategoriesData[0].products);
+        getCategories().then(respData => {
+            setCategoriesData(respData);
+            if(respData.length) {
+                setSelectedCategoryId(respData[0].id);
             }
-        }, 2000);
-    }, []);
+        }).catch(err => {
+            setCategoriesData([]);
+            console.log(err);
+        })
+
+        // setTimeout(() => {
+        //     setCategoriesData(fakeCategoriesData);
+        //     if(Array.isArray(fakeCategoriesData) && fakeCategoriesData.length) {
+        //         setProductsData(fakeCategoriesData[0].products);
+        //     }
+        // }, 2000);
+    }, [getCategories]);
 
     useEffect(() => {
         const selectedCategory = categoriesData.find(c => c.id === selectedCategoryId);
@@ -227,13 +240,7 @@ export const CategoriesPage: FC = () => {
                             <FilesList 
                             onFileDowmload={downloadFileHandler}
                             onFileDelete={deleteFileHandler}
-                            filesList={[
-                                {
-                                    id: 1,
-                                    systemName: 'qwerty',
-                                    displayName: 'my_file.txt'
-                                }
-                            ]} 
+                            filesList={selectedProduct?.userFiles ?? []} 
                             />
                         </div>
                         <div className='cat-page__product-add-info-data'>

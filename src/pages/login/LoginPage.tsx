@@ -2,10 +2,10 @@ import { FC, useState } from 'react';
 import { TextField } from '../../components';
 import { Button } from '../../components';
 import { WidgetLayout } from '../../components/layouts';
-import './loginPageStyles.scss';
 import { useNavigate } from 'react-router-dom';
 import { RoutesPaths } from '../../constants/commonConstants';
 import { Auth } from '../../api';
+import './loginPageStyles.scss';
 
 export const LoginPage: FC = () => {
     const [login, setLogin] = useState<string>('');
@@ -23,15 +23,14 @@ export const LoginPage: FC = () => {
     const navigate = useNavigate();
 
     const loginHandler = () => {
-        // console.log({
-        //         login,
-        //         password
-        //     });
-        // navigate(RoutesPaths.Categories)
-
         signIn({login, password})
-            .then((resp) => {
-                console.log(resp);
+            .then((respData) => {
+                if(respData.role === 'user') {
+                    navigate(`/${RoutesPaths.NoPermissions}`);
+                } else {
+                    navigate(`/${RoutesPaths.Categories}`);
+                }
+                console.log(respData);
             })
             .catch((err) => {
                 console.log(err);
