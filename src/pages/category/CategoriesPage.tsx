@@ -1,10 +1,10 @@
 import {FC, useEffect, useState} from "react";
 import { Layout } from "../../components/layouts";
 import './categoryPageStyles.scss';
-import { Button, Dialog, DropDown, FilesList, ProductsList, TextField } from "../../components";
+import { Button, Dialog, DropDown, FeaturesList, FilesList, ProductsList, TextField } from "../../components";
 import { Category, Product } from "../../types/models";
 import { DropDownItem } from "../../components/dropDown/DropDownProps";
-import { UploadIcon } from "../../assets/icons";
+import { AddIcon, UploadIcon } from "../../assets/icons";
 
 const fakeProductsData = [
     {id: 1, name: 'Носки', brand: 'Белорусский трикотаж', price: 200, description: 'Описание товара'},
@@ -101,7 +101,7 @@ export const CategoriesPage: FC = () => {
         if(!selectedProduct) {
             return '';
         }
-        return `${selectedProduct.name} ${selectedProduct.brand ?? ""}`.trim();
+        return `${selectedProduct.name}`.trim();
     }
 
     const productDialogContentRenderer = () => {
@@ -147,7 +147,7 @@ export const CategoriesPage: FC = () => {
                 {productDialogContentRenderer()}
             </Dialog>
             <div className="cat-page">
-                <div className="cat-page__product-list-container">
+                <div className="cat-page__products-list-container">
                     <DropDown items={categoriesData.map(cc => {
                         return {
                             text: cc.name,
@@ -176,8 +176,8 @@ export const CategoriesPage: FC = () => {
                                     <span>{selectedProduct?.price ?? ' -'}{' ₽'}</span>
                                 </div>
                                 <div>
-                                    <strong>Описание: </strong>
-                                    <span>{selectedProduct?.description ?? '-'}</span>
+                                    <strong>Бренд: </strong>
+                                    <span>{selectedProduct?.brand ?? '-'}</span>
                                 </div>
                             </div>
                         </div>
@@ -188,6 +188,7 @@ export const CategoriesPage: FC = () => {
                     </div>
                     <div className='cat-page__product-add-info'>
                         <div className='cat-page__product-add-info-files'>
+                            <span className="cat-page__label">Прикрепленные файлы</span>
                             <FilesList 
                             onFileDowmload={downloadFileHandler}
                             onFileDelete={deleteFileHandler}
@@ -202,9 +203,20 @@ export const CategoriesPage: FC = () => {
                         </div>
                         <div className='cat-page__product-add-info-data'>
                             <div className='cat-page__product-add-info-data_cell'>
-                                Description</div>
+                                <span className="cat-page__label">Описание: </span>
+                                <span>{selectedProduct?.description ?? '-'}</span>
+                            </div>
                             <div className='cat-page__product-add-info-data_cell'>
-                                Особенности товара</div>
+                                <div className="cat-page__list-title">
+                                    <span className="cat-page__label">
+                                        Особенности товара
+                                    </span>
+                                    <AddIcon height={20} width={20}/>
+                                </div>
+                                
+                                <FeaturesList 
+                                    featuresList={selectedProduct?.features ?? []} />
+                            </div>
                         </div>
                     </div>
                 </div>

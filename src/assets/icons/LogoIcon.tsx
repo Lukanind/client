@@ -19,15 +19,15 @@ export const LogoIcon: FC<IconProps> = props => {
         xmlns="http://www.w3.org/2000/svg" 
         xmlnsXlink="http://www.w3.org/1999/xlink">
 
-    <g id="Page-1" stroke="none" stroke-width="1" fill={color} fill-rule="evenodd">
+    <g id="Page-1" stroke="none" strokeWidth="1" fill={color} fillRule="evenodd">
         <g id="Bullet-List">
        
-            <line x1="10" y1="7" x2="19" y2="7" id="Path" stroke={color} stroke-width="2" stroke-linecap="round"></line>
-            <line x1="5" y1="7" x2="5.1" y2="7" id="Path" stroke={color} stroke-width="2" stroke-linecap="round"></line>
-            <line x1="10" y1="17" x2="19" y2="17" id="Path" stroke={color} stroke-width="2" stroke-linecap="round"></line>
-            <line x1="5" y1="17" x2="5.1" y2="17" id="Path" stroke={color} stroke-width="2" stroke-linecap="round"></line>
-            <line x1="10" y1="12" x2="19" y2="12" id="Path" stroke={color} stroke-width="2" stroke-linecap="round"></line>
-            <line x1="5" y1="12" x2="5.1" y2="12" id="Path" stroke={color} stroke-width="2" stroke-linecap="round"></line>
+            <line x1="10" y1="7" x2="19" y2="7" id="Path" stroke={color} strokeWidth="2" strokeLinecap="round"></line>
+            <line x1="5" y1="7" x2="5.1" y2="7" id="Path" stroke={color} strokeWidth="2" strokeLinecap="round"></line>
+            <line x1="10" y1="17" x2="19" y2="17" id="Path" stroke={color} strokeWidth="2" strokeLinecap="round"></line>
+            <line x1="5" y1="17" x2="5.1" y2="17" id="Path" stroke={color} strokeWidth="2" strokeLinecap="round"></line>
+            <line x1="10" y1="12" x2="19" y2="12" id="Path" stroke={color} strokeWidth="2" strokeLinecap="round"></line>
+            <line x1="5" y1="12" x2="5.1" y2="12" id="Path" stroke={color} strokeWidth="2" strokeLinecap="round"></line>
         </g>
     </g>
         </svg>
