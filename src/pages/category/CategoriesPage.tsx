@@ -38,10 +38,15 @@ export const CategoriesPage: FC = () => {
     const [prodActionMode, setProdActionMode] = useState<'create' | 'edit'>('create');
     const [prodToEdit, setProdToEdit] = useState(0);
 
+    const [showFeatureDialog, setShowFeatureDialog] = useState(false);
+
     const [name, setName] = useState('');
     const [brand, setBrand] = useState('');
     const [price, setPrice] = useState('');
     const [description, setDescription] = useState('');
+
+    const [feature, setFeature] = useState('');
+    const [featureDescription, setFeatureDescription] = useState('');
 
     useEffect(() => {
         setTimeout(() => {
@@ -120,6 +125,29 @@ export const CategoriesPage: FC = () => {
         clearProductDialogFields();
     }
 
+    const featureDialogContentRenderer = () => {
+        return (
+            <>
+                <TextField labelText="Особенность товара (название пункта)" value={feature} onChange={(val) => setFeature(val)}/>
+                <TextField labelText="Описание" value={featureDescription} onChange={(val) => setFeatureDescription(val)}/>
+            </>
+        )
+    }
+
+    const clearFeatureDialogFields = () => {
+        setFeature('');
+        setFeatureDescription('');
+    }
+
+    const createFeatureHandler = () => {
+        setShowFeatureDialog(true);
+    }
+
+    const closeFeatureDialogHandler = () =>{
+        setShowFeatureDialog(false);
+        clearFeatureDialogFields();
+    }
+
     const categoryChangedHandler = (id?: string) => {
         const _id: number | undefined = !id ? undefined : +id;
         setSelectedCategoryId(_id);
@@ -145,6 +173,13 @@ export const CategoriesPage: FC = () => {
                 onCancel={closeProductDialogHandler}
             >
                 {productDialogContentRenderer()}
+            </Dialog>
+            <Dialog title="Добавить особенность товару"
+                    open={showFeatureDialog}
+                    onSave={() => {}}
+                    onCancel={closeFeatureDialogHandler}
+            >
+                {featureDialogContentRenderer()}
             </Dialog>
             <div className="cat-page">
                 <div className="cat-page__products-list-container">
@@ -211,11 +246,12 @@ export const CategoriesPage: FC = () => {
                                     <span className="cat-page__label">
                                         Особенности товара
                                     </span>
-                                    <AddIcon height={20} width={20}/>
+                                    <AddIcon height={20} width={20} onClick={createFeatureHandler}/>
                                 </div>
                                 
                                 <FeaturesList 
-                                    featuresList={selectedProduct?.features ?? []} />
+                                    featuresList={selectedProduct?.features ?? []} 
+                                />
                             </div>
                         </div>
                     </div>
