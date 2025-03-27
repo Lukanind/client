@@ -4,7 +4,7 @@ import './categoryPageStyles.scss';
 import { Button, Dialog, DropDown, FeaturesList, FilesList, ProductsList, TextField } from "../../components";
 import { Category, Product } from "../../types/models";
 import { DropDownItem } from "../../components/dropDown/DropDownProps";
-import { AddIcon, UploadIcon } from "../../assets/icons";
+import { AddIcon, PencilIcon, TrashIcon, UploadIcon } from "../../assets/icons";
 import { Categories } from "../../api";
 
 const fakeProductsData = [
@@ -29,7 +29,7 @@ const fakeProductsData = [
 //     {id: 3, name: 'Категория 3', products: []}
 // ];
 export const CategoriesPage: FC = () => {
-    const {getCategories} = Categories;
+    const {getCategories, deleteCategories} = Categories;
 
     const [categoriesData, setCategoriesData] = useState<Array<Category>>([]);
     const [productsData, setProductsData] = useState<Array<Product>>([]);
@@ -178,6 +178,23 @@ export const CategoriesPage: FC = () => {
         
     }
 
+    const deleteCategoriesHandler = () => {
+        if(!window.confirm('Вы действительно хотите удалить данную категорию?')) {
+            return;
+        }
+        if(!selectedCategoryId) {
+            return;
+        }
+        deleteCategories(selectedCategoryId).then(() => {
+            setCategoriesData(prev => {
+                const filtered = prev.filter(c => c.id !== selectedCategoryId);
+                return [...filtered];
+            });
+        }).catch(err => {
+            console.log(err);
+        });
+    }
+
     return (
         <Layout >
             <Dialog title={prodActionMode !== 'edit' ? 'Добавить товар' : 'Изменить товар'}
@@ -196,15 +213,22 @@ export const CategoriesPage: FC = () => {
             </Dialog>
             <div className="cat-page">
                 <div className="cat-page__products-list-container">
-                    <DropDown items={categoriesData.map(cc => {
-                        return {
-                            text: cc.name,
-                            value: cc.id.toString()
-                        } as DropDownItem
-                    })} 
-                        label="Категории:" 
-                        selectedChanged={(val) => categoryChangedHandler(val)}
-                    />
+                    <div>
+                        <DropDown 
+                            items={categoriesData.map(cc => {
+                                return {
+                                    text: cc.name,
+                                    value: cc.id.toString()
+                                } as DropDownItem
+                            })} 
+                            label="Категории:" 
+                            selectedChanged={(val) => categoryChangedHandler(val)}
+                        />
+                        <AddIcon width={16} height={16} className="cat-page__add-btn" />
+                        <PencilIcon />
+                        <TrashIcon onClick={deleteCategoriesHandler} />
+                    </div>
+                    
                     <ProductsList productsList={productsData}
                         onItemClick={(id) => onProductSelectedHandler(id)}
                         onItemDelete={(id) => console.log('delete ', id)}

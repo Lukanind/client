@@ -9,7 +9,7 @@ const getCategories = async() =>
     await axiosGet('/Categories') as Array<Category>;
 
 const addCategories = async(addCategoriesData: addCategoriesResponseDto) =>
-    await axiosPost('/Categories/category', addCategoriesData) as void;
+    await axiosPost('/Categories/category', addCategoriesData) as number;
 
 const editCategories = async(editCategoriesData: editCategoriesResponseDto) =>
     await axiosPut('/Categories/category', editCategoriesData) as void;
@@ -17,7 +17,7 @@ const editCategories = async(editCategoriesData: editCategoriesResponseDto) =>
 const deleteCategories = async(id: number | string) =>
     await axiosDelete(`/Categories/category?id=${id}`) as void;
 
-export const Categories = {
+export const CategoriesApi = {
     getCategories,
     addCategories,
     editCategories,

@@ -1,2 +1,2 @@
 export {Auth} from './auth';
-export {Categories} from './categories';
+export {CategoriesApi as Categories} from './categories';
