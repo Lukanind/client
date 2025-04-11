@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { TextField } from '../../components';
 import { Button } from '../../components';
 import { WidgetLayout } from '../../components/layouts';
@@ -6,11 +6,26 @@ import { useNavigate } from 'react-router-dom';
 import { RoutesPaths } from '../../constants/commonConstants';
 import { Auth } from '../../api';
 import './loginPageStyles.scss';
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxToolkitHooks';
 
 export const LoginPage: FC = () => {
+    const {accessToken, role} = useAppSelector((state) => state.user);
+    const dispatch = useAppDispatch();
+
     const [login, setLogin] = useState<string>('');
     const [password, setPassword] = useState<string>('');
-    const {signIn} = Auth;
+    // const {signIn} = Auth;
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if(accessToken) {
+            if(role === 'user' || !role) {
+                navigate(`/${RoutesPaths.NoPermissions}`);
+            } else {
+                navigate(`/${RoutesPaths.Categories}`);
+            }
+        }
+    }, [accessToken, role, navigate]);
 
     const loginChangeHandler = (value: string) => {
         setLogin(value);
@@ -20,21 +35,19 @@ export const LoginPage: FC = () => {
         setPassword(value);
     };
 
-    const navigate = useNavigate();
-
     const loginHandler = () => {
-        signIn({login, password})
-            .then((respData) => {
-                if(respData.role === 'user') {
-                    navigate(`/${RoutesPaths.NoPermissions}`);
-                } else {
-                    navigate(`/${RoutesPaths.Categories}`);
-                }
-                console.log(respData);
-            })
-            .catch((err) => {
-                console.log(err);
-            })
+        // signIn({login, password})
+        //     .then((respData) => {
+        //         if(respData.role === 'user') {
+        //             navigate(`/${RoutesPaths.NoPermissions}`);
+        //         } else {
+        //             navigate(`/${RoutesPaths.Categories}`);
+        //         }
+        //         console.log(respData);
+        //     })
+        //     .catch((err) => {
+        //         console.log(err);
+        //     })
     }
 
     const toRegistrationHandler = () => {

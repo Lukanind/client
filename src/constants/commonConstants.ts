@@ -7,3 +7,5 @@ export enum RoutesPaths {
 }
 
 export const AccessTokenKey = 'AccessTokenKey';
+export const RoleKey = 'Role';
+export const UserNameKey = 'UserName';

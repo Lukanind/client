@@ -6,29 +6,13 @@ import { Category, Product } from "../../types/models";
 import { DropDownItem } from "../../components/dropDown/DropDownProps";
 import { AddIcon, PencilIcon, TrashIcon, UploadIcon } from "../../assets/icons";
 import { Categories } from "../../api";
+import { useAppSelector } from "../../hooks/reduxToolkitHooks";
+import { useNavigate } from "react-router-dom";
+import { RoutesPaths } from "../../constants/commonConstants";
 
-const fakeProductsData = [
-    {id: 1, name: 'Носки', brand: 'Белорусский трикотаж', price: 200, description: 'Описание товара'},
-    {id: 2, name: 'Что-то там', brand: 'Бренд', price: 2000,
-        features: [{
-            id: 1,
-            feature: 'GPS',
-            description: 'Есть'
-        },{
-            id: 2,
-            feature: 'Порты',
-            description: 'USB-C, USB-A'
-        }]
-    },
-    {id: 3, name: 'Очки', price: 666}
-];
-
-// const fakeCategoriesData = [
-//     {id: 1, name: 'Категория 1', products: []},
-//     {id: 2, name: 'Категория 2', products: fakeProductsData},
-//     {id: 3, name: 'Категория 3', products: []}
-// ];
 export const CategoriesPage: FC = () => {
+const { role, accessToken} = useAppSelector((state) => state.user);
+
     const {getCategories, deleteCategories} = Categories;
 
     const [categoriesData, setCategoriesData] = useState<Array<Category>>([]);
@@ -51,6 +35,18 @@ export const CategoriesPage: FC = () => {
     const [feature, setFeature] = useState('');
     const [featureDescription, setFeatureDescription] = useState('');
 
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if(accessToken) {
+            if(role === 'user' || !role) {
+                navigate(`/${RoutesPaths.NoPermissions}`);
+            } else {
+                navigate(`/${RoutesPaths.Login}`);
+            }
+        }
+    }, [accessToken, role, navigate]);
+
     useEffect(() => {
         getCategories().then(respData => {
             setCategoriesData(respData);
@@ -61,13 +57,6 @@ export const CategoriesPage: FC = () => {
             setCategoriesData([]);
             console.log(err);
         })
-
-        // setTimeout(() => {
-        //     setCategoriesData(fakeCategoriesData);
-        //     if(Array.isArray(fakeCategoriesData) && fakeCategoriesData.length) {
-        //         setProductsData(fakeCategoriesData[0].products);
-        //     }
-        // }, 2000);
     }, [getCategories]);
 
     useEffect(() => {
@@ -224,11 +213,13 @@ export const CategoriesPage: FC = () => {
                             label="Категории:" 
                             selectedChanged={(val) => categoryChangedHandler(val)}
                         />
-                        <AddIcon width={16} height={16} className="cat-page__add-btn" />
-                        <PencilIcon />
-                        <TrashIcon onClick={deleteCategoriesHandler} />
+                        {role === 'admin' && (<>
+                            <AddIcon width={16} height={16} className="cat-page__add-btn" />
+                            <PencilIcon />
+                            <TrashIcon onClick={deleteCategoriesHandler} />
+                            </>
+                        )}
                     </div>
-                    
                     <ProductsList productsList={productsData}
                         onItemClick={(id) => onProductSelectedHandler(id)}
                         onItemDelete={(id) => console.log('delete ', id)}
