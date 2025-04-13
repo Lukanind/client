@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { RoutesPaths } from "../../constants/commonConstants";
 
 export const CategoriesPage: FC = () => {
-const { role, accessToken} = useAppSelector((state) => state.user);
+    const { role, accessToken} = useAppSelector((state) => state.user);
 
     const {getCategories, deleteCategories} = Categories;
 

@@ -7,6 +7,7 @@ import { RoutesPaths } from '../../constants/commonConstants';
 import { Auth } from '../../api';
 import './loginPageStyles.scss';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxToolkitHooks';
+import { signIn } from '../../store';
 
 export const LoginPage: FC = () => {
     const {accessToken, role} = useAppSelector((state) => state.user);
@@ -48,6 +49,7 @@ export const LoginPage: FC = () => {
         //     .catch((err) => {
         //         console.log(err);
         //     })
+        dispatch(signIn({login, password}));
     }
 
     const toRegistrationHandler = () => {
