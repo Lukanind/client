@@ -3,7 +3,8 @@ import { addCategoriesResponseDto, editCategoriesResponseDto } from "../types/ap
 import { Category } from "../types/models";
 import { AxiosInstance } from "./axiosInstance";
 
-const {axiosPost, axiosGet, axiosPut, axiosDelete} = AxiosInstance(sessionStorage.getItem(AccessTokenKey) ?? '');
+export const CategoriesApi = () => {
+    const {axiosPost, axiosGet, axiosPut, axiosDelete} = AxiosInstance(sessionStorage.getItem(AccessTokenKey) ?? '');
 
 const getCategories = async() =>
     await axiosGet('/Categories') as Array<Category>;
@@ -17,9 +18,11 @@ const editCategories = async(editCategoriesData: editCategoriesResponseDto) =>
 const deleteCategories = async(id: number | string) =>
     await axiosDelete(`/Categories/category?id=${id}`) as void;
 
-export const CategoriesApi = {
+return {
     getCategories,
     addCategories,
     editCategories,
     deleteCategories
 }
+}
+

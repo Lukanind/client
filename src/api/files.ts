@@ -13,7 +13,7 @@ const downloadFile = async(downloadFileData: DownloadFileResponseDto) =>
 const deleteFile = async(id: number | string) =>
     await axiosDelete(`/Files/delete?id=${id}`) as void;
 
-export const CategoriesApi = {
+export const FilesApi = {
     uploadFile,
     downloadFile,
     deleteFile

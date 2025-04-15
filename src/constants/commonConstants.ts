@@ -2,7 +2,7 @@ export enum RoutesPaths {
     Login = '/',
     Registration = 'registration',
     Categories = 'categories',
-    Administration = '/administration',
+    Administration = 'administration',
     NoPermissions = 'nopermissions'
 }
 

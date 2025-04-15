@@ -65,3 +65,8 @@ export interface DownloadFileResponseDto {
     systemName: string;
     displayName: string;
 }
+
+export interface SetRoleResponseDto {
+    userId: number;
+    roleName: 'admin' | 'manager' | 'user';
+}

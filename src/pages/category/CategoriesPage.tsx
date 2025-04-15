@@ -5,15 +5,18 @@ import { Button, Dialog, DropDown, FeaturesList, FilesList, ProductsList, TextFi
 import { Category, Product } from "../../types/models";
 import { DropDownItem } from "../../components/dropDown/DropDownProps";
 import { AddIcon, PencilIcon, TrashIcon, UploadIcon } from "../../assets/icons";
-import { Categories } from "../../api";
-import { useAppSelector } from "../../hooks/reduxToolkitHooks";
+//import { Categories } from "../../api";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxToolkitHooks";
 import { useNavigate } from "react-router-dom";
 import { RoutesPaths } from "../../constants/commonConstants";
+import { addCategories, addFeature, addProduct, deleteCategories, deleteFeature, deleteProduct, editCategories, editProduct, getCategories } from "../../services";
 
 export const CategoriesPage: FC = () => {
     const { role, accessToken} = useAppSelector((state) => state.user);
+    const {categories} = useAppSelector((state) => state.categories)
+    const dispatch = useAppDispatch();
 
-    const {getCategories, deleteCategories} = Categories;
+    //const {getCategories, deleteCategories} = Categories;
 
     const [categoriesData, setCategoriesData] = useState<Array<Category>>([]);
     const [productsData, setProductsData] = useState<Array<Product>>([]);
@@ -25,6 +28,9 @@ export const CategoriesPage: FC = () => {
     const [prodActionMode, setProdActionMode] = useState<'create' | 'edit'>('create');
     const [prodToEdit, setProdToEdit] = useState(0);
 
+    const [showCategoryDialog, setShowCategoryDialog] = useState(false);
+    const [categoryActionMode, setCategoryActionMode] = useState<'create' | 'edit'>('create');
+
     const [showFeatureDialog, setShowFeatureDialog] = useState(false);
 
     const [name, setName] = useState('');
@@ -35,6 +41,8 @@ export const CategoriesPage: FC = () => {
     const [feature, setFeature] = useState('');
     const [featureDescription, setFeatureDescription] = useState('');
 
+    const [categoryName, setCategoryName] = useState('');
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -42,28 +50,38 @@ export const CategoriesPage: FC = () => {
             if(role === 'user' || !role) {
                 navigate(`/${RoutesPaths.NoPermissions}`);
             } else {
-                navigate(`/${RoutesPaths.Login}`);
+                dispatch(getCategories());
             }
+        } else {
+            navigate(`/${RoutesPaths.Login}`);
         }
     }, [accessToken, role, navigate]);
 
-    useEffect(() => {
-        getCategories().then(respData => {
-            setCategoriesData(respData);
-            if(respData.length) {
-                setSelectedCategoryId(respData[0].id);
-            }
-        }).catch(err => {
-            setCategoriesData([]);
-            console.log(err);
-        })
-    }, [getCategories]);
+    // useEffect(() => {
+    //     getCategories().then(respData => {
+    //         setCategoriesData(respData);
+    //         if(respData.length) {
+    //             setSelectedCategoryId(respData[0].id);
+    //         }
+    //     }).catch(err => {
+    //         setCategoriesData([]);
+    //         console.log(err);
+    //     })
+    // }, [getCategories]);
 
     useEffect(() => {
-        const selectedCategory = categoriesData.find(c => c.id === selectedCategoryId);
+        const selectedCategory = selectedCategoryId
+            ? categories.find(c => c.id === selectedCategoryId)
+            : categories[0];
+        setSelectedCategoryId(selectedCategory?.id);
+
+        if (categoryActionMode === 'edit') {
+            setCategoryName(selectedCategory?.name || '');
+        }
+        
         setProductsData(selectedCategory ? selectedCategory.products : []);
         setSelectedProduct(undefined);
-    }, [categoriesData, selectedCategoryId]);
+    }, [categories, selectedCategoryId, showCategoryDialog]);
 
     useEffect(() => {
         console.log('useEffect work');
@@ -80,6 +98,20 @@ export const CategoriesPage: FC = () => {
         }
         //setProductsData(fakeProductsData);
     }, [productsData, prodActionMode, prodToEdit, showProductDialog]);
+
+    // useEffect(() => {
+    //     console.log('category field useEffect');
+    //     setCategoryName('');
+    //     if (categoryActionMode === 'edit') {
+    //         if (!(selectedCategoryId === undefined || selectedCategoryId === null)){
+    //             const category = categoryActionMode === 'edit'
+    //             ? categoriesData.find(c => c.id === selectedCategoryId)
+    //             : undefined;
+
+    //             setCategoryName(category?.name ?? '');
+    //         }
+    //     }
+    // }, [showCategoryDialog, categoryActionMode])
 
     const clearProductDialogFields = () => {
         setName('');
@@ -99,6 +131,13 @@ export const CategoriesPage: FC = () => {
         setShowProductDialog(true);
     }
 
+    const deleteProductHandler = (id: number) => {
+        setProdToEdit(id);
+        if(window.confirm('Вы действительно хотите удалить данного пользователя?')) {
+            dispatch(deleteProduct(id));
+        }
+    }
+
     const onProductSelectedHandler = (id: number) => {
         const product = productsData.find(p => p.id === id);
         setSelectedProduct(product);
@@ -111,29 +150,37 @@ export const CategoriesPage: FC = () => {
         return `${selectedProduct.name}`.trim();
     }
 
-    const productDialogContentRenderer = () => {
-        return (
-            <>
-                <TextField labelText="Название" value={name} onChange={(val) => setName(val)}/>
-                <TextField labelText="Бренд" value={brand} onChange={(val) => setBrand(val)}/>
-                <TextField labelText="Цена" value={String(price)} onChange={(val) => setPrice(val)}/>
-                <TextField labelText="Описание" value={description} onChange={(val) => setDescription(val)}/>
-            </>
-        )
-    }
-
     const closeProductDialogHandler = () =>{
         setShowProductDialog(false);
         clearProductDialogFields();
     }
 
-    const featureDialogContentRenderer = () => {
-        return (
-            <>
-                <TextField labelText="Особенность товара (название пункта)" value={feature} onChange={(val) => setFeature(val)}/>
-                <TextField labelText="Описание" value={featureDescription} onChange={(val) => setFeatureDescription(val)}/>
-            </>
-        )
+    const saveProductDialogHandler = () => {
+        console.log('Save handler called');
+        if (selectedCategoryId === undefined || selectedCategoryId === null) {
+            console.log('2. No category selected');
+            return;
+        }
+        const savingProduct = {
+            categoryId: selectedCategoryId,
+            name: name,
+            brand: brand,
+            price: Number(price),
+            description: description
+        };
+        if (prodActionMode === 'create') {
+            console.log('3. Dispatching action');
+            dispatch(addProduct(savingProduct));
+        }
+        if (prodActionMode === 'edit' && selectedProduct) {
+            dispatch(editProduct({
+                ...savingProduct,
+                id: selectedProduct.id,
+                features: selectedProduct.features,
+                userFiles: selectedProduct.userFiles
+            }))
+        }
+        closeProductDialogHandler();
     }
 
     const clearFeatureDialogFields = () => {
@@ -155,6 +202,48 @@ export const CategoriesPage: FC = () => {
         setSelectedCategoryId(_id);
     }
 
+    const createCategoryHandler = () => {
+        setCategoryActionMode('create');
+        setShowCategoryDialog(true);
+    }
+
+    const editCategoryHandler = () => {
+        setCategoryActionMode('edit');
+        setShowCategoryDialog(true);
+    }
+
+    const closeCategoryDialogHandler = () => {
+        setShowCategoryDialog(false);
+        setCategoryName('');
+        setCategoryActionMode('create');
+    }
+
+    const saveCategoryHandler = () => {
+        if (categoryActionMode === 'create') {
+            dispatch(addCategories({name: categoryName}))
+            closeCategoryDialogHandler();
+            return;
+        }
+        if (selectedCategoryId === undefined || selectedCategoryId === null) {
+            closeCategoryDialogHandler();
+            return;
+        }
+        if (categoryActionMode === 'edit') {
+            dispatch(editCategories({
+                id: selectedCategoryId,
+                name: categoryName
+            }));
+        }
+        closeCategoryDialogHandler();
+    }
+
+    const deleteCategoryHandler = () => {
+        if (selectedCategoryId && window.confirm('Вы действительно хотите удалить данный отдел?')) {
+            dispatch(deleteCategories(selectedCategoryId));
+            setSelectedCategoryId(undefined);
+        }
+    }
+
     const uploadFileHandler = () => {
         
     }
@@ -167,62 +256,72 @@ export const CategoriesPage: FC = () => {
         
     }
 
-    const deleteCategoriesHandler = () => {
-        if(!window.confirm('Вы действительно хотите удалить данную категорию?')) {
-            return;
-        }
-        if(!selectedCategoryId) {
-            return;
-        }
-        deleteCategories(selectedCategoryId).then(() => {
-            setCategoriesData(prev => {
-                const filtered = prev.filter(c => c.id !== selectedCategoryId);
-                return [...filtered];
-            });
-        }).catch(err => {
-            console.log(err);
-        });
-    }
-
     return (
         <Layout >
-            <Dialog title={prodActionMode !== 'edit' ? 'Добавить товар' : 'Изменить товар'}
-                open={showProductDialog}
-                onSave={() => {}}
-                onCancel={closeProductDialogHandler}
-            >
-                {productDialogContentRenderer()}
+            {role === 'admin' && (
+                <Dialog title={categoryActionMode !== 'edit' ? 'Добавить категорию' : 'Изменить категорию'}
+                    open={showCategoryDialog}
+                    onSave={saveCategoryHandler}
+                    onCancel={closeCategoryDialogHandler}
+                >
+                <TextField labelText="Наименование" value={categoryName} onChange={(val) => setCategoryName(val)}/>
             </Dialog>
+            )}
+                <Dialog title={prodActionMode !== 'edit' ? 'Добавить товар' : 'Изменить товар'}
+                    open={showProductDialog}
+                    onSave={saveProductDialogHandler}
+                    onCancel={closeProductDialogHandler}
+                >
+                    <TextField labelText="Название" value={name} onChange={(val) => setName(val)}/>
+                    <TextField labelText="Бренд" value={brand} onChange={(val) => setBrand(val)}/>
+                    <TextField labelText="Цена" value={String(price)} onChange={(val) => setPrice(val)}/>
+                    <TextField labelText="Описание" value={description} onChange={(val) => setDescription(val)}/>
+                </Dialog>
+            
             <Dialog title="Добавить особенность товару"
-                    open={showFeatureDialog}
-                    onSave={() => {}}
-                    onCancel={closeFeatureDialogHandler}
+                open={showFeatureDialog}
+                onSave={() => {
+                    dispatch(addFeature({
+                        productId: selectedProduct!.id,
+                        featureName: feature,
+                        description: featureDescription
+                    }));
+                    setShowFeatureDialog(false);
+                    setFeature('');
+                    setFeatureDescription('');
+                }}
+                onCancel={() => {
+                    setShowFeatureDialog(false);
+                    clearFeatureDialogFields();
+                }}
             >
-                {featureDialogContentRenderer()}
+                <TextField labelText="Особенность товара (название пункта)" value={feature} onChange={(val) => setFeature(val)}/>
+                <TextField labelText="Описание" value={featureDescription} onChange={(val) => setFeatureDescription(val)}/>
             </Dialog>
             <div className="cat-page">
                 <div className="cat-page__products-list-container">
                     <div>
                         <DropDown 
-                            items={categoriesData.map(cc => {
+                            items={categories.map(cc => {
                                 return {
                                     text: cc.name,
                                     value: cc.id.toString()
                                 } as DropDownItem
-                            })} 
+                            }) ?? []
+                            } 
                             label="Категории:" 
                             selectedChanged={(val) => categoryChangedHandler(val)}
                         />
                         {role === 'admin' && (<>
-                            <AddIcon width={16} height={16} className="cat-page__add-btn" />
-                            <PencilIcon />
-                            <TrashIcon onClick={deleteCategoriesHandler} />
+                            <AddIcon width={16} height={16} className="cat-page__add-btn" onClick={createCategoryHandler}/>
+                            <PencilIcon onClick={editCategoryHandler}/>
+                            <TrashIcon onClick={deleteCategoryHandler} />
                             </>
                         )}
                     </div>
                     <ProductsList productsList={productsData}
                         onItemClick={(id) => onProductSelectedHandler(id)}
-                        onItemDelete={(id) => console.log('delete ', id)}
+                        onItemDelete={deleteProductHandler}
                         onItemEdit={editProductHandler}
                     />
                     <Button className="cat-page__add-product-btn" text="Добавить товар" onClick={createProductHandler}/>
@@ -246,16 +345,18 @@ export const CategoriesPage: FC = () => {
                         </div>
                        
                         <div className="cat-page__product-info-actions">
-                            <UploadIcon onClick={uploadFileHandler}/>
+                            {selectedProduct && (<UploadIcon onClick={uploadFileHandler}/>)}
                         </div>
                     </div>
                     <div className='cat-page__product-add-info'>
                         <div className='cat-page__product-add-info-files'>
-                            <span className="cat-page__label">Прикрепленные файлы</span>
+                            <span className="cat-page__label">
+                                Прикрепленные файлы
+                            </span>
                             <FilesList 
-                            onFileDowmload={downloadFileHandler}
-                            onFileDelete={deleteFileHandler}
-                            filesList={selectedProduct?.userFiles ?? []} 
+                                onFileDowmload={downloadFileHandler}
+                                onFileDelete={deleteFileHandler}
+                                filesList={selectedProduct?.userFiles ?? []} 
                             />
                         </div>
                         <div className='cat-page__product-add-info-data'>
@@ -268,11 +369,17 @@ export const CategoriesPage: FC = () => {
                                     <span className="cat-page__label">
                                         Особенности товара
                                     </span>
-                                    <AddIcon height={20} width={20} onClick={createFeatureHandler}/>
+                                    {!!selectedProduct && (
+                                        <AddIcon height={20} width={20} className="cat-page__add-btn" onClick={() => setShowFeatureDialog(true)}/>
+                                    )}
                                 </div>
-                                
                                 <FeaturesList 
-                                    featuresList={selectedProduct?.features ?? []} 
+                                    featuresList={selectedProduct?.features ?? []}
+                                    onDelete={(id) => {
+                                        if (window.confirm('Вы точно хотите удалить данную запись об особенности товара?')) {
+                                            dispatch(deleteFeature(id));
+                                        }
+                                    }}
                                 />
                             </div>
                         </div>
