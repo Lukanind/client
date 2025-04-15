@@ -1,4 +1,4 @@
-import {FC, useEffect, useState} from "react";
+import {FC, useEffect, useRef, useState} from "react";
 import { Layout } from "../../components/layouts";
 import './categoryPageStyles.scss';
 import { Button, Dialog, DropDown, FeaturesList, FilesList, ProductsList, TextField } from "../../components";
@@ -9,7 +9,8 @@ import { AddIcon, PencilIcon, TrashIcon, UploadIcon } from "../../assets/icons";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxToolkitHooks";
 import { useNavigate } from "react-router-dom";
 import { RoutesPaths } from "../../constants/commonConstants";
-import { addCategories, addFeature, addProduct, deleteCategories, deleteFeature, deleteProduct, editCategories, editProduct, getCategories } from "../../services";
+import { addCategories, addFeature, addProduct, deleteCategories, deleteFeature, deleteFile, deleteProduct, editCategories, editProduct, getCategories, uploadFile } from "../../services";
+import { FilesApi } from "../../api";
 
 export const CategoriesPage: FC = () => {
     const { role, accessToken} = useAppSelector((state) => state.user);
@@ -43,6 +44,8 @@ export const CategoriesPage: FC = () => {
 
     const [categoryName, setCategoryName] = useState('');
 
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -53,7 +56,7 @@ export const CategoriesPage: FC = () => {
                 dispatch(getCategories());
             }
         } else {
-            navigate(`/${RoutesPaths.Login}`);
+            navigate(`${RoutesPaths.Login}`);
         }
     }, [accessToken, role, navigate]);
 
@@ -244,16 +247,52 @@ export const CategoriesPage: FC = () => {
         }
     }
 
+    const fileToBase64 = (file: any, callback: (base64string: string) => void) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+            if (reader?.result && typeof reader.result === 'string') {
+                const base64string = reader.result.split(',')[1];
+                callback(base64string);
+            } else {
+                callback('');
+            }
+        }
+    }
+
     const uploadFileHandler = () => {
-        
+        fileInputRef.current?.click();
     }
 
-    const downloadFileHandler = (id: number) => {
-        
+    const fileSelectHandler = (e: any) => {
+        const file = e.target.files[0];
+        if (file) {
+            fileToBase64(file, (base64String: string) => {
+                dispatch(uploadFile({
+                    productId: selectedProduct!.id,
+                    fileName: file.name,
+                    fileString: base64String
+                }))
+            })
+        }
     }
 
-    const deleteFileHandler = (id: number) => {
-        
+    const downloadFileHandler = (displayName: string, systemName: string) => {
+        FilesApi().downloadFile({
+            displayName,
+            systemName
+        }).then(data => {
+            const blob = new Blob([data], {'type': 'application/octet-stream'});
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = displayName;
+            link.click();
+        });
+    }
+
+    const deleteFileHandler = (systemName: string) => {
+        dispatch(deleteFile(systemName));
+        //FilesApi().deleteFile(systemName);
     }
 
     return (
@@ -298,6 +337,7 @@ export const CategoriesPage: FC = () => {
                 <TextField labelText="Особенность товара (название пункта)" value={feature} onChange={(val) => setFeature(val)}/>
                 <TextField labelText="Описание" value={featureDescription} onChange={(val) => setFeatureDescription(val)}/>
             </Dialog>
+            <input type='file' onChange={fileSelectHandler} style={{display: 'none'}} ref={fileInputRef}/>
             <div className="cat-page">
                 <div className="cat-page__products-list-container">
                     <div>

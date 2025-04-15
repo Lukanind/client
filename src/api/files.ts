@@ -2,19 +2,22 @@ import { AccessTokenKey } from "../constants/commonConstants";
 import { DownloadFileResponseDto,UploadFileResponseDto } from "../types/apiTypes";
 import { AxiosInstance } from "./axiosInstance";
 
-const {axiosPost, axiosDelete} = AxiosInstance(sessionStorage.getItem(AccessTokenKey) ?? '');
+export const FilesApi = () => {
+    const {axiosBlob, axiosPost, axiosDelete} = AxiosInstance(sessionStorage.getItem(AccessTokenKey) ?? '');
 
-const uploadFile = async(uploadFileData: UploadFileResponseDto) =>
-    await axiosPost('/Files/upload', uploadFileData) as void;
+    const uploadFile = async(uploadFileData: UploadFileResponseDto) =>
+        await axiosPost('/Files/upload', uploadFileData) as void;
 
-const downloadFile = async(downloadFileData: DownloadFileResponseDto) =>
-    await axiosPost('/Files/download', downloadFileData) as Blob;
+    const downloadFile = async(downloadFileData: DownloadFileResponseDto) =>
+        await axiosBlob('/Files/download', downloadFileData);
 
-const deleteFile = async(id: number | string) =>
-    await axiosDelete(`/Files/delete?id=${id}`) as void;
+    const deleteFile = async(systemName: number | string) =>
+        await axiosDelete(`/Files/delete?systemName=${systemName}`) as void;
 
-export const FilesApi = {
-    uploadFile,
-    downloadFile,
-    deleteFile
+    return {
+        uploadFile,
+        downloadFile,
+        deleteFile
+    }
 }
+

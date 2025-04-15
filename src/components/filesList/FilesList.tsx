@@ -10,12 +10,12 @@ export const FilesList: FC<FilesListProps> = props => {
         onFileDelete
     } = props;
 
-    const downloadHandler = (id: number) => {
-        onFileDowmload && onFileDowmload(id);
+    const downloadHandler = (displayName: string, systemName: string) => {
+        onFileDowmload && onFileDowmload(displayName, systemName);
     }
 
-    const deleteHandler = (id: number) => {
-        onFileDelete && onFileDelete(id);
+    const deleteHandler = (systemName: string) => {
+        onFileDelete && onFileDelete(systemName);
     }
 
     return (
@@ -27,8 +27,8 @@ export const FilesList: FC<FilesListProps> = props => {
                         {file.displayName}
                     </div>
                     <div className="files-list__item-actions">
-                        <DownloadIcon width={16} height={16} onClick={() => {downloadHandler(file.id)}}/>
-                        <TrashIcon width={16} height={16} onClick={() => {deleteHandler(file.id)}}/>
+                        <DownloadIcon width={16} height={16} onClick={() => {downloadHandler(file.displayName, file.systemName)}}/>
+                        <TrashIcon width={16} height={16} onClick={() => {deleteHandler(file.systemName)}}/>
                     </div>   
                 </div>)
             })}

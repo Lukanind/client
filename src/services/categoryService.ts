@@ -118,7 +118,7 @@ export const uploadFile = createAsyncThunk<Array<Category>, UploadFileResponseDt
     `${NAMESPACE}/uploadFile`,
     async(uploadFileData, {rejectWithValue}) => {
         try {
-            await FilesApi.uploadFile(uploadFileData);
+            await FilesApi().uploadFile(uploadFileData);
             return await Categories().getCategories();
         } catch(error) {
             return rejectWithValue((error as Error).message);
@@ -128,9 +128,9 @@ export const uploadFile = createAsyncThunk<Array<Category>, UploadFileResponseDt
 
 export const deleteFile = createAsyncThunk<Array<Category>, string | number, AsyncThunkOptions>(
     `${NAMESPACE}/deleteFile`,
-    async(id, {rejectWithValue}) => {
+    async(systemName, {rejectWithValue}) => {
         try {
-            await FilesApi.deleteFile(id);
+            await FilesApi().deleteFile(systemName);
             return await Categories().getCategories();
         } catch(error) {
             return rejectWithValue((error as Error).message);

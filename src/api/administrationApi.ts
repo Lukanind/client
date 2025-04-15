@@ -9,7 +9,7 @@ export const AdministrationApi = () => {
     const {axiosGet, axiosPatch} = AxiosInstance(token);
 
     const getUsers = async() =>
-        await axiosGet('/Administartion/getusers') as Array<User>;
+        await axiosGet('/Administration/getusers') as Array<User>;
 
     const setUserRole = async(setRoleData: SetRoleResponseDto) =>
         await axiosPatch('/Administration/setuserrole', setRoleData) as void;
