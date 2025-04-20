@@ -5,3 +5,4 @@ export {PencilIcon} from './PencilIcon';
 export {UploadIcon} from './UploadIcon';
 export {DownloadIcon} from './DownloadIcon';
 export {AddIcon} from './AddIcon';
+export {BrainIcon} from './BrainIcon';

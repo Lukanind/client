@@ -103,9 +103,30 @@
         flex-direction: column;
         justify-content: space-between;
         gap: 32px;
+        overflow: hidden;
+        position: relative;
 
         &_cell {
             height: 50%;
         }
+    }
+
+    &__description-box {
+        max-height: 200px;
+        overflow-y: auto;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        box-sizing: border-box;
+    }
+
+    &__features-box {
+        max-height: 200px; // подбери нужную тебе высоту
+        overflow-y: auto;
+        padding-right: 4px;
+        box-sizing: border-box;
+    
+        // если список в виде текста
+        white-space: pre-wrap;
+        word-wrap: break-word;
     }
 }

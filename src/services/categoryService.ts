@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { Category } from "../types/models";
 import { AsyncThunkOptions } from "../types/toolkitTypes";
 import { Categories, FilesApi } from "../api";
-import { addCategoriesResponseDto, AddFeatureResponseDto, AddProductResponseDto, editCategoriesResponseDto, UpdateProductResponseDto, UploadFileResponseDto } from "../types/apiTypes";
+import { addCategoriesResponseDto, AddFeatureResponseDto, AddProductResponseDto, editCategoriesResponseDto, GenerateDescriptionResponseDto, UpdateProductResponseDto, UploadFileResponseDto } from "../types/apiTypes";
 import { ProductApi } from "../api/products";
 
 const NAMESPACE = 'categories';
@@ -132,6 +132,17 @@ export const deleteFile = createAsyncThunk<Array<Category>, string | number, Asy
         try {
             await FilesApi().deleteFile(systemName);
             return await Categories().getCategories();
+        } catch(error) {
+            return rejectWithValue((error as Error).message);
+        }
+    }
+);
+
+export const generateDescription = createAsyncThunk<string, GenerateDescriptionResponseDto, AsyncThunkOptions>(
+    `${NAMESPACE}/generateDescription`,
+    async(prompt, {rejectWithValue}) => {
+        try {
+            return await ProductApi().generateDescription(prompt);
         } catch(error) {
             return rejectWithValue((error as Error).message);
         }

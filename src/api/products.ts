@@ -1,5 +1,5 @@
 import { AccessTokenKey } from "../constants/commonConstants";
-import { AddFeatureResponseDto, AddProductResponseDto, UpdateProductResponseDto } from "../types/apiTypes";
+import { AddFeatureResponseDto, AddProductResponseDto, GenerateDescriptionResponseDto, UpdateProductResponseDto } from "../types/apiTypes";
 import { AxiosInstance } from "./axiosInstance";
 
 export const ProductApi = () => {
@@ -22,12 +22,16 @@ export const ProductApi = () => {
     const deleteFeature = async(id: number | string) =>
         await axiosDelete(`/Product/feature?id=${id}`) as void;
 
+    const generateDescription = async(prompt: GenerateDescriptionResponseDto) => 
+        await axiosPost('/Product/generate', prompt) as string;
+
 return {
     addProduct,
     editProduct,
     deleteProduct,
     addFeature,
-    deleteFeature
+    deleteFeature,
+    generateDescription
 } 
 }
 

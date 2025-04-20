@@ -70,3 +70,7 @@ export interface SetRoleResponseDto {
     userId: number;
     roleName: 'admin' | 'manager' | 'user';
 }
+
+export interface GenerateDescriptionResponseDto {
+    prompt: string;
+}

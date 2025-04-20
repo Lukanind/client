@@ -4,12 +4,12 @@ import './categoryPageStyles.scss';
 import { Button, Dialog, DropDown, FeaturesList, FilesList, ProductsList, TextField } from "../../components";
 import { Category, Product } from "../../types/models";
 import { DropDownItem } from "../../components/dropDown/DropDownProps";
-import { AddIcon, PencilIcon, TrashIcon, UploadIcon } from "../../assets/icons";
+import { AddIcon, BrainIcon, PencilIcon, TrashIcon, UploadIcon } from "../../assets/icons";
 //import { Categories } from "../../api";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxToolkitHooks";
 import { useNavigate } from "react-router-dom";
 import { RoutesPaths } from "../../constants/commonConstants";
-import { addCategories, addFeature, addProduct, deleteCategories, deleteFeature, deleteFile, deleteProduct, editCategories, editProduct, getCategories, uploadFile } from "../../services";
+import { addCategories, addFeature, addProduct, deleteCategories, deleteFeature, deleteFile, deleteProduct, editCategories, editProduct, generateDescription, getCategories, uploadFile } from "../../services";
 import { FilesApi } from "../../api";
 
 export const CategoriesPage: FC = () => {
@@ -83,6 +83,9 @@ export const CategoriesPage: FC = () => {
         }
         
         setProductsData(selectedCategory ? selectedCategory.products : []);
+        if (selectedCategory) {
+            setSelectedProduct(selectedCategory.products[0]);
+        } else 
         setSelectedProduct(undefined);
     }, [categories, selectedCategoryId, showCategoryDialog]);
 
@@ -295,6 +298,39 @@ export const CategoriesPage: FC = () => {
         //FilesApi().deleteFile(systemName);
     }
 
+    const generateDescriptionHandler = () => {
+        if (selectedProduct) {
+            const savingProduct = {
+                categoryId: selectedCategoryId,
+                name: name,
+                brand: brand,
+                price: Number(price),
+                description: description
+            };
+            const featuresText = (selectedProduct.features ?? [])
+                .map(f => `${f.featureName}: ${f.description}`)
+                .join(', ');
+            const prompt = `Сгенерируй краткое красочное описание для товара с критериями: Название: ${selectedProduct.name}, Бренд: ${selectedProduct.brand} Особенности: ${featuresText}. Описание:`;
+            dispatch(generateDescription({
+                prompt: prompt
+            })).then(data => {
+                if (data.meta.requestStatus === 'fulfilled' && data.payload) {
+                    console.log('Description generated:', data.payload);
+                    setDescription(data.payload);
+                    savingProduct.description = data.payload;
+                    dispatch(editProduct({
+                        ...savingProduct,
+                        id: selectedProduct.id,
+                        features: selectedProduct.features,
+                        userFiles: selectedProduct.userFiles
+                    }))
+                } else {
+                    alert('Не удалось сгенерировать описание');
+                }
+            });
+        }
+    }
+
     return (
         <Layout >
             {role === 'admin' && (
@@ -401,8 +437,18 @@ export const CategoriesPage: FC = () => {
                         </div>
                         <div className='cat-page__product-add-info-data'>
                             <div className='cat-page__product-add-info-data_cell'>
-                                <span className="cat-page__label">Описание: </span>
-                                <span>{selectedProduct?.description ?? '-'}</span>
+                                <div className="cat-page__list-title">
+                                     <span className="cat-page__label">
+                                        Описание: 
+                                    </span>
+                                    {!!selectedProduct && (
+                                        <BrainIcon height={24} width={24} className="cat-page__add-btn" onClick={generateDescriptionHandler}/>
+                                    )}
+                                </div>
+                                <div className="cat-page__description-box">
+                                    <span>{selectedProduct?.description ?? '-'}</span>
+                                </div>
+                                
                             </div>
                             <div className='cat-page__product-add-info-data_cell'>
                                 <div className="cat-page__list-title">
@@ -413,14 +459,16 @@ export const CategoriesPage: FC = () => {
                                         <AddIcon height={20} width={20} className="cat-page__add-btn" onClick={() => setShowFeatureDialog(true)}/>
                                     )}
                                 </div>
-                                <FeaturesList 
-                                    featuresList={selectedProduct?.features ?? []}
-                                    onDelete={(id) => {
-                                        if (window.confirm('Вы точно хотите удалить данную запись об особенности товара?')) {
-                                            dispatch(deleteFeature(id));
-                                        }
-                                    }}
-                                />
+                                <div className="cat-page__features-box">
+                                    <FeaturesList 
+                                        featuresList={selectedProduct?.features ?? []}
+                                        onDelete={(id) => {
+                                            if (window.confirm('Вы точно хотите удалить данную запись об особенности товара?')) {
+                                                dispatch(deleteFeature(id));
+                                            }
+                                        }}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
