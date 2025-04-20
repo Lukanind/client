@@ -6,13 +6,13 @@ import { AxiosInstance } from "./axiosInstance";
 export const AdministrationApi = () => {
     const token = sessionStorage.getItem(AccessTokenKey) ?? '';
 
-    const {axiosGet, axiosPatch} = AxiosInstance(token);
+    const {axiosGet, axiosPost} = AxiosInstance(token);
 
     const getUsers = async() =>
         await axiosGet('/Administration/getusers') as Array<User>;
 
     const setUserRole = async(setRoleData: SetRoleResponseDto) =>
-        await axiosPatch('/Administration/setuserrole', setRoleData) as void;
+        await axiosPost('/Administration/setuserrole', setRoleData) as void;
 
     return {
         getUsers,

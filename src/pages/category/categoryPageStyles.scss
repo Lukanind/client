@@ -79,6 +79,9 @@
         min-height: 32px;
         min-width: 32px;
         margin-left: auto;
+        display: flex;
+        gap: 8px;
+        align-items: center;
 
         & svg {
             cursor: pointer;
@@ -128,5 +131,15 @@
         // если список в виде текста
         white-space: pre-wrap;
         word-wrap: break-word;
+    }
+
+    &__category-dropdown {
+        min-width: 80%;
+    }
+
+    &__category-header {
+        display: flex;
+        align-content: center;
+        gap: 8px;
     }
 }

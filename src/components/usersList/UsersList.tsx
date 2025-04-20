@@ -17,9 +17,9 @@ export const UsersList: FC<UsersListProps> = props => {
             {usersList.map(user => {
                 return (
                     <div key={user.id} 
-                        className="users=list__item"
+                        className="users-list__item"
                     >
-                        <div className="prod-list__item-item">
+                        <div className="users-list__item-fio">
                             <span>
                                 <strong>Логин: </strong>
                                 <span>{user.login}</span>
@@ -33,7 +33,7 @@ export const UsersList: FC<UsersListProps> = props => {
                                 <span>{user.role}</span>
                             </span>
                         </div>
-                        <div className="prod-list__item-actions">
+                        <div className="users-list__item-actions">
                             <Button text="Сделать администратором"
                                 type="primary"
                                 onClick={() => onSetAdminRole(user.id)} 
@@ -43,7 +43,7 @@ export const UsersList: FC<UsersListProps> = props => {
                                 onClick={() => onSetManagerRole(user.id)} 
                             />
                             <Button text="Отобрать права"
-                                type="primary"
+                                type="secondary"
                                 onClick={() => onResetPermissions(user.id)} 
                             />
                         </div>   

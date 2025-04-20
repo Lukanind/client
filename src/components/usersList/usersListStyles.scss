@@ -18,6 +18,7 @@
         font-weight: 500;
         border-bottom: 1px solid $color-dirtywhite;
         box-shadow: 0px 1px 1px -1px $color-delimitershadow;
+        max-width: 65%;
         
         &_selected {
             background-color: $color-selected;

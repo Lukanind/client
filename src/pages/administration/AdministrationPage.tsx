@@ -28,15 +28,15 @@ export const AdministrationPage: FC = () => {
     }, [accessToken, role, navigate, dispatch]);
 
     const setAdminRoleHandler = (id: number) => {
-        dispatch(setUserRole({userId: id, roleName: 'admin'}));
+        dispatch(setUserRole({userId: id, role: 'admin'}));
     }
 
     const setManagerRoleHandler = (id: number) => {
-        dispatch(setUserRole({userId: id, roleName: 'manager'}));
+        dispatch(setUserRole({userId: id, role: 'manager'}));
     }
 
     const resetPermissionHandler = (id: number) => {
-        dispatch(setUserRole({userId: id, roleName: 'user'}));
+        dispatch(setUserRole({userId: id, role: 'user'}));
     }
 
     return (

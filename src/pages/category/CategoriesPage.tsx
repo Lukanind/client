@@ -300,30 +300,37 @@ export const CategoriesPage: FC = () => {
 
     const generateDescriptionHandler = () => {
         if (selectedProduct) {
-            const savingProduct = {
-                categoryId: selectedCategoryId,
-                name: name,
-                brand: brand,
-                price: Number(price),
-                description: description
-            };
+            setProdActionMode('edit');
             const featuresText = (selectedProduct.features ?? [])
                 .map(f => `${f.featureName}: ${f.description}`)
                 .join(', ');
-            const prompt = `Сгенерируй краткое красочное описание для товара с критериями: Название: ${selectedProduct.name}, Бренд: ${selectedProduct.brand} Особенности: ${featuresText}. Описание:`;
+            const prompt = `Сгенерируй краткое красочное описание для товара с критериями: 
+                Название: ${selectedProduct.name}, 
+                Бренд: ${selectedProduct.brand} 
+                Особенности: ${featuresText}. 
+                Описание:`;
             dispatch(generateDescription({
                 prompt: prompt
             })).then(data => {
                 if (data.meta.requestStatus === 'fulfilled' && data.payload) {
                     console.log('Description generated:', data.payload);
-                    setDescription(data.payload);
-                    savingProduct.description = data.payload;
-                    dispatch(editProduct({
-                        ...savingProduct,
+
+                    const newDescription = data.payload;
+                    setDescription(newDescription);
+                    
+                    const productToUpdate = {
                         id: selectedProduct.id,
+                        name: name || selectedProduct.name,
+                        brand: brand || selectedProduct.brand,
+                        price: Number(price) || 0,
+                        description: newDescription,
                         features: selectedProduct.features,
                         userFiles: selectedProduct.userFiles
-                    }))
+                    };
+
+                    dispatch(editProduct(
+                        productToUpdate
+                    ))
                 } else {
                     alert('Не удалось сгенерировать описание');
                 }
@@ -376,7 +383,8 @@ export const CategoriesPage: FC = () => {
             <input type='file' onChange={fileSelectHandler} style={{display: 'none'}} ref={fileInputRef}/>
             <div className="cat-page">
                 <div className="cat-page__products-list-container">
-                    <div>
+                    <div className="cat-page__category-header">
+                        <div className="cat-page__category-dropdown">
                         <DropDown 
                             items={categories.map(cc => {
                                 return {
@@ -388,13 +396,17 @@ export const CategoriesPage: FC = () => {
                             label="Категории:" 
                             selectedChanged={(val) => categoryChangedHandler(val)}
                         />
-                        {role === 'admin' && (<>
-                            <AddIcon width={16} height={16} className="cat-page__add-btn" onClick={createCategoryHandler}/>
-                            <PencilIcon onClick={editCategoryHandler}/>
-                            <TrashIcon onClick={deleteCategoryHandler} />
+                        </div>
+                        <div className="cat-page__product-info-actions">
+                            {role === 'admin' && (<>
+                                <AddIcon width={16} height={16} className="cat-page__add-btn" onClick={createCategoryHandler}/>
+                                <PencilIcon onClick={editCategoryHandler}/>
+                                <TrashIcon onClick={deleteCategoryHandler} />
                             </>
-                        )}
+                            )}
+                        </div>
                     </div>
+                    
                     <ProductsList productsList={productsData}
                         onItemClick={(id) => onProductSelectedHandler(id)}
                         onItemDelete={deleteProductHandler}
