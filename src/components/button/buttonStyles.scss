@@ -22,14 +22,14 @@
   }
   
   &__primary {
-    background: #3369f3;
+    background: $color-main;
     color: #ffffff;
     border: none;
   }
   
   &__secondary {
-    background: #ffffff;
-    color: #3369f3;
+    background: $color-secondary;
+    color: $color-darkgrey;
     border: none;
   }
 }

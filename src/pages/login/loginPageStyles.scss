@@ -1,13 +1,17 @@
+@import '../../styles/variables.scss';
+
 .login-page {
     &__form {
         min-width: 450px;
         min-height: 250px;
         border-radius: 4px;
-        box-shadow: 0 0 6px 0px #00000024;
+        box-shadow: 0 0 6px 0px $color-darkgrey;
         padding: 32px;
         display: flex;
         flex-direction: column;
         gap: 20px;
+
+        background-color: $color-white;
     }
 
     &__title {

@@ -1,3 +1,5 @@
+@import '../../styles/variables.scss';
+
 .reg-page {
     &__form {
         min-width: 450px;
@@ -8,6 +10,8 @@
         display: flex;
         flex-direction: column;
         gap: 20px;
+
+        background-color: $color-white;
     }
 
     &__title {

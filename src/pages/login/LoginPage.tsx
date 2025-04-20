@@ -37,18 +37,6 @@ export const LoginPage: FC = () => {
     };
 
     const loginHandler = () => {
-        // signIn({login, password})
-        //     .then((respData) => {
-        //         if(respData.role === 'user') {
-        //             navigate(`/${RoutesPaths.NoPermissions}`);
-        //         } else {
-        //             navigate(`/${RoutesPaths.Categories}`);
-        //         }
-        //         console.log(respData);
-        //     })
-        //     .catch((err) => {
-        //         console.log(err);
-        //     })
         dispatch(signIn({login, password}));
     }
 
@@ -59,6 +47,7 @@ export const LoginPage: FC = () => {
 
     return (
         <WidgetLayout>
+            <div className="login-page">
             <div className="login-page__form">
                 <h3 className='login-page__title'>Вход</h3>
                 <div className='login-page__fields'>
@@ -69,6 +58,7 @@ export const LoginPage: FC = () => {
                     <Button text='Войти' onClick={loginHandler} type="primary"/>
                     <Button text='Зарегистрироваться' onClick={toRegistrationHandler} type="secondary"/>
                 </div>
+            </div>
             </div>
         </WidgetLayout>
     )

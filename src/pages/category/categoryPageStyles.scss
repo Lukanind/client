@@ -20,6 +20,24 @@
         
     }
 
+    &__add-btn {
+        display: flex;
+        align-items: center;
+
+        &_loading {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    }
+
     &__label {
         padding: 0 10px;
         font-style: italic;
@@ -40,6 +58,7 @@
     &__add-product-btn {
         margin-top: auto;
         margin-bottom: 10px;
+        background-color: $color-secondary;
     }
 
     &__product-info-container {
@@ -53,7 +72,7 @@
         display: flex;
         gap: 30px;
         align-items: center;
-        border-bottom: 1px solid $color-dirtywhite;
+        border-bottom: 1px solid $color-scrollshadow;
         box-shadow: 0px opx 3px -3px $color-delimitershadow;
         padding-bottom: 10px;
     }
@@ -81,7 +100,7 @@
         margin-left: auto;
         display: flex;
         gap: 8px;
-        align-items: center;
+        align-items: flex-end;
 
         & svg {
             cursor: pointer;
@@ -96,7 +115,7 @@
 
     &__product-add-info-files {
         min-width: 500px;
-        border-right: 1px solid $color-dirtywhite;
+        border-right: 1px solid $color-delimitershadow;
         padding-right: 32px;
     }
 
@@ -123,12 +142,11 @@
     }
 
     &__features-box {
-        max-height: 200px; // подбери нужную тебе высоту
+        max-height: 200px; 
         overflow-y: auto;
         padding-right: 4px;
         box-sizing: border-box;
     
-        // если список в виде текста
         white-space: pre-wrap;
         word-wrap: break-word;
     }

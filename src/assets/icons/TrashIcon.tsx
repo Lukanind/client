@@ -24,7 +24,7 @@ export const TrashIcon: FC<IconProps> = props => {
                 <rect id="Rectangle" fillRule="nonzero" x="0" y="0" width="24" height="24">
     
     </rect>
-                <path d="M6,6 L6.96683,19.5356 C6.98552,19.7973 7.20324,20 7.46556,20 L16.5344,20 C16.7968,20 17.0145,19.7973 17.0332,19.5356 L18,6" id="Path" stroke="#0C0310" strokeWidth="2" strokeLinecap="round">
+                <path d="M6,6 L6.96683,19.5356 C6.98552,19.7973 7.20324,20 7.46556,20 L16.5344,20 C16.7968,20 17.0145,19.7973 17.0332,19.5356 L18,6" id="Path" stroke={color} strokeWidth="2" strokeLinecap="round">
     
     </path>
                 <line x1="4" y1="6" x2="20" y2="6" id="Path" stroke={color} strokeWidth="2" strokeLinecap="round">

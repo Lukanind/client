@@ -26,7 +26,7 @@ export const PencilIcon: FC<IconProps> = props => {
                     <line x1="20" y1="20" x2="4" y2="20" id="Path" stroke={color} strokeWidth="2" strokeLinecap="round">
         
         </line>
-                    <path d="M14.5858,4.41421 C15.3668,3.63316 16.6332,3.63316 17.4142,4.41421 L17.4142,4.41421 C18.1953,5.19526 18.1953,6.46159 17.4142,7.24264 L9.13096,15.5259 L6.10051,15.7279 L6.30254,12.6975 L14.5858,4.41421 Z" id="Path" stroke="#0C0310" stroke-width="2" stroke-linecap="round">
+                    <path d="M14.5858,4.41421 C15.3668,3.63316 16.6332,3.63316 17.4142,4.41421 L17.4142,4.41421 C18.1953,5.19526 18.1953,6.46159 17.4142,7.24264 L9.13096,15.5259 L6.10051,15.7279 L6.30254,12.6975 L14.5858,4.41421 Z" id="Path" stroke={color} stroke-width="2" stroke-linecap="round">
         
         </path>
                 </g>

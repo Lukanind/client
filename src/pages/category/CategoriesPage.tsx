@@ -4,7 +4,7 @@ import './categoryPageStyles.scss';
 import { Button, Dialog, DropDown, FeaturesList, FilesList, ProductsList, TextField } from "../../components";
 import { Category, Product } from "../../types/models";
 import { DropDownItem } from "../../components/dropDown/DropDownProps";
-import { AddIcon, BrainIcon, PencilIcon, TrashIcon, UploadIcon } from "../../assets/icons";
+import { AddIcon, BrainIcon, LoadingIcon, PencilIcon, TrashIcon, UploadIcon } from "../../assets/icons";
 //import { Categories } from "../../api";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxToolkitHooks";
 import { useNavigate } from "react-router-dom";
@@ -46,6 +46,8 @@ export const CategoriesPage: FC = () => {
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
+    const [isLoading, setIsLoading] = useState(false);
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -83,9 +85,9 @@ export const CategoriesPage: FC = () => {
         }
         
         setProductsData(selectedCategory ? selectedCategory.products : []);
-        if (selectedCategory) {
-            setSelectedProduct(selectedCategory.products[0]);
-        } else 
+        // if (selectedCategory) {
+        //     setSelectedProduct(selectedCategory.products[0]);
+        // } else 
         setSelectedProduct(undefined);
     }, [categories, selectedCategoryId, showCategoryDialog]);
 
@@ -300,6 +302,18 @@ export const CategoriesPage: FC = () => {
 
     const generateDescriptionHandler = () => {
         if (selectedProduct) {
+            setIsLoading(true);
+            
+            const productToUpdate = {
+                id: selectedProduct.id,
+                name: selectedProduct.name,
+                brand: selectedProduct.brand,
+                price: Number(selectedProduct.price),
+                description: selectedProduct.description,
+                features: selectedProduct.features,
+                userFiles: selectedProduct.userFiles
+            };
+
             setProdActionMode('edit');
             const featuresText = (selectedProduct.features ?? [])
                 .map(f => `${f.featureName}: ${f.description}`)
@@ -318,15 +332,7 @@ export const CategoriesPage: FC = () => {
                     const newDescription = data.payload;
                     setDescription(newDescription);
                     
-                    const productToUpdate = {
-                        id: selectedProduct.id,
-                        name: name || selectedProduct.name,
-                        brand: brand || selectedProduct.brand,
-                        price: Number(price) || 0,
-                        description: newDescription,
-                        features: selectedProduct.features,
-                        userFiles: selectedProduct.userFiles
-                    };
+                    productToUpdate.description = newDescription;
 
                     dispatch(editProduct(
                         productToUpdate
@@ -334,7 +340,10 @@ export const CategoriesPage: FC = () => {
                 } else {
                     alert('Не удалось сгенерировать описание');
                 }
-            });
+            })
+            .finally(() => 
+                setIsLoading(false)
+            );
         }
     }
 
@@ -394,12 +403,13 @@ export const CategoriesPage: FC = () => {
                             }) ?? []
                             } 
                             label="Категории:" 
+                            lblWeight = 'strong'
                             selectedChanged={(val) => categoryChangedHandler(val)}
                         />
                         </div>
                         <div className="cat-page__product-info-actions">
                             {role === 'admin' && (<>
-                                <AddIcon width={16} height={16} className="cat-page__add-btn" onClick={createCategoryHandler}/>
+                                <AddIcon width={20} height={20} className="cat-page__add-btn" onClick={createCategoryHandler}/>
                                 <PencilIcon onClick={editCategoryHandler}/>
                                 <TrashIcon onClick={deleteCategoryHandler} />
                             </>
@@ -454,7 +464,16 @@ export const CategoriesPage: FC = () => {
                                         Описание: 
                                     </span>
                                     {!!selectedProduct && (
-                                        <BrainIcon height={24} width={24} className="cat-page__add-btn" onClick={generateDescriptionHandler}/>
+                                        isLoading ? (
+                                            <LoadingIcon height={24} width={24} className="cat-page__add-btn_loading" />
+                                        ) : (
+                                            <BrainIcon 
+                                                height={24} 
+                                                width={24} 
+                                                className="cat-page__add-btn" 
+                                                onClick={generateDescriptionHandler} 
+                                            />
+                                        )
                                     )}
                                 </div>
                                 <div className="cat-page__description-box">
